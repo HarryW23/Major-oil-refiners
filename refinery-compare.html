@@ -51,7 +51,7 @@ h2 small{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:8px}
 .pick small{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .pick:focus-visible,.node:focus-visible,label.sw input:focus-visible{outline:2px solid var(--in);outline-offset:2px}
 
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px 28px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px 24px}
 .metric{display:flex;flex-direction:column;gap:6px;min-width:0}
 .metric h3{margin:0;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.08em}
 .bar{display:grid;grid-template-columns:5.2em 1fr 4.6em;gap:8px;align-items:center;font-size:12.5px}
@@ -128,6 +128,8 @@ tbody th{font-weight:500;white-space:nowrap}
 tr.grp th{background:var(--soft);font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:500}
 tr.df{background:var(--diff)}
 td.n{color:var(--muted)}
+td .yp{display:inline-block;margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--in);font-variant-numeric:tabular-nums}
+td .yp.top{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 td .c{font-family:var(--mono);font-size:12px}
 td .x{display:block;font-size:11.5px;color:var(--muted);max-width:26em}
 table.meta td{min-width:14em}
@@ -144,7 +146,7 @@ table.meta td{min-width:14em}
   <div class="picker" id="picker" role="group" aria-label="選擇要比較的煉廠"></div>
 
   <section class="card">
-    <h2>規模<small>萬噸/年；條形長度按五家中的最大值比例</small></h2>
+    <h2>規模與出率<small>條形長度按五家中的最大值比例</small></h2>
     <div class="metrics" id="metrics"></div>
     <p class="note" id="mnote"></p>
   </section>
@@ -169,7 +171,7 @@ table.meta td{min-width:14em}
 
   <section class="card">
     <div class="toolbar">
-      <h2>逐項對照<small>數字為萬噸/年；底色標出有的廠有、有的廠沒有（或工藝不同）的項目</small></h2>
+      <h2>逐項對照<small>數字為萬噸/年，藍字為出率（產量÷原油加工量），加底線的是該行最高；底色標出有的廠有、有的廠沒有（或工藝不同）的項目</small></h2>
       <label class="sw"><input type="checkbox" id="onlyDiffTab"> 只看有差異的</label>
     </div>
     <div class="tscroll"><table id="matrix"></table></div>
@@ -180,7 +182,7 @@ table.meta td{min-width:14em}
     <div class="tscroll"><table class="meta" id="meta"></table></div>
   </section>
 
-  <p class="foot">規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。空白或「✓」表示有該裝置但未查到可靠規模；盛虹含斯爾邦、虹威、虹港等關聯公司的裝置，浙石化的PTA和PET在廠外。</p>
+  <p class="foot">出率＝設計產能÷原油加工能力，屬於設計口徑，實際運行會隨原油、負荷和檢修變化；加工裝置標的是處理量佔原油的比例，不是出率。規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。空白或「✓」表示有該裝置但未查到可靠規模；盛虹含斯爾邦、虹威、虹港等關聯公司的裝置，浙石化的PTA和PET在廠外。</p>
 </div>
 
 <script>
@@ -276,8 +278,8 @@ const PLANTS=[
   coker:['300','一期配置。'],h2:['煤焦制氫',''],pdh:['60',''],cracker:['3×140','三套裂解合計420萬噸乙烯。'],ccr:'',
   gasoline:['','成品油收率不到四成，其餘都是化工品。'],jet:'',diesel:'',coke:['','部分自用於氣化制氫。'],sulfur:'',
   propylene:'',ethylene:'',c4:'',aro:['PX 880','全球最大的PX生產基地之一。'],acn:'',po:['','與苯乙烯聯產（待核實規模）。'],eoeg:'',mtbe:'',benzene:'',px:['880',''],
-  mma:'',pp:'',eva:['30',''],pe:'',alky:'',sm:'',phenol:'',pta:['廠外·逸盛','PX主要供應榮盛參股的逸盛石化（寧波、大連、海南）的PTA裝置，不在魚山島內。'],
-  pc:['52',''],pet:['廠外','榮盛、恆逸、桐昆等股東方的聚酯工廠。']}},
+  mma:'',pp:['2×90',''],eva:['30',''],pe:['',''],alky:'',sm:'',phenol:'',pta:['廠外·逸盛','PX主要供應榮盛參股的逸盛石化（寧波、大連、海南）的PTA裝置，不在魚山島內。'],
+  pc:['52',''],abs:['40','新增140萬噸乙烯項目配套。'],pet:['廠外','榮盛、恆逸、桐昆等股東方的聚酯工廠。']}},
 {id:'hengli',tab:'恆力',cap:'2000',name:'恆力煉化',full:'恆力石化 · 遼寧大連長興島',
  kpi:[['原油加工','2000'],['對二甲苯','450'],['乙烯','150']],
  meta:[['股東','恆力石化（恆力集團）全資'],['投產','煉化2019年，乙烯2020年'],
@@ -288,7 +290,7 @@ const PLANTS=[
   pdh:['130','C3/iC4混合脫氫（待核實）。'],cracker:['150','進料以煉廠乾氣、乙烷、液化氣和加氫尾油為主，石腦油用量少。'],ccr:['3×320','重整能力960萬噸，是PX產量的基礎。'],
   gasoline:'',jet:'',diesel:['','產量被壓到很低。'],sulfur:'',
   propylene:'',ethylene:'',c4:'',aro:['PX 450','設計450萬噸，實際產能已超過設計值。'],eoeg:['180',''],mtbe:'',benzene:'',px:['450',''],
-  pp:'',pe:['HDPE 40',''],alky:'',sm:['72',''],pta:['廠內 1200','長興島PTA約1200萬噸，另有惠州基地；PX管道直供。'],
+  pp:['80–85',''],pe:['HDPE 40',''],alky:'',sm:['72',''],pta:['廠內 1200','長興島PTA約1200萬噸，另有惠州基地；PX管道直供。'],
   pet:['','集團內聚酯切片、滌綸長絲、瓶片、薄膜。'],pbt:['康輝新材料','恆力旗下康輝的PBT、PBAT。']}},
 {id:'shenghong',tab:'盛虹',cap:'1600',name:'盛虹煉化',full:'東方盛虹 · 江蘇連雲港徐圩',
  kpi:[['原油加工','1600'],['對二甲苯','280'],['乙烯','110']],
@@ -315,7 +317,7 @@ const PLANTS=[
   gasoline:'',jet:'',diesel:'',sulfur:'',
   propylene:'',ethylene:'',c4:['丁二烯 20',''],aro:['混合芳烴 300','只抽提，不建完整的PX聯合裝置。'],acn:'',po:'',eoeg:'',benzene:'',
   px:['300','一期未建PX，混二甲苯外售給PX、PTA工廠。'],
-  pp:['約150','多套裝置合計（早期規劃數）。'],eva:['EVA/LDPE',''],pe:['','HDPE、LLDPE，另有超高分子量聚乙烯。'],sm:'',abs:''}},
+  pp:['4×40＋30','環評口徑。'],eva:['EVA/LDPE',''],pe:['','HDPE、LLDPE，另有超高分子量聚乙烯。'],sm:'',abs:''}},
 {id:'huajin',tab:'華錦阿美',cap:'1500',name:'華錦阿美',full:'遼寧盤錦遼濱 · 精細化工及原料工程',
  kpi:[['原油加工','1500'],['對二甲苯','200'],['乙烯','165']],
  meta:[['股東','北方華錦51%、沙特阿美30%、盤錦鑫誠19%'],
@@ -330,7 +332,51 @@ const PLANTS=[
   pp:['2×50',''],pe:['2×45＋20','兩套45萬噸全密度聚乙烯，一套20萬噸HDPE。'],sm:['70','乙苯/苯乙烯73.6/70萬噸。']}}
 ];
 
-
+/* ---------- 出率：q[id]=[萬噸/年, 說明, 不計出率] ；出率＝產量÷原油加工量 ---------- */
+const FEED=new Set(['cdu','gas','nht','dhc','vhc','fcc','rhc','sda','coker','ccr']);
+const YIELD={
+ zpc:{oil:{lo:32,hi:32,t:'約32%',note:'一期設計35%、二期29%，兩期合計約1280萬噸。'},
+  q:{cdu:[4000],rhc:[500,'一期固定床渣油加氫；漿態床規模未計入。'],fcc:[420,'一期。'],coker:[300,'一期。'],pdh:[60],
+   cracker:[420,'三套裂解的乙烯產能。'],ethylene:[420],aro:[880,'PX產能。'],px:[880],benzene:[283,'一期152＋二期131。'],
+   jet:[574,'一期284＋二期290。'],gasoline:[null,'一期汽油277萬噸，佔一期原油的13.9%；二期汽油未查到，全廠出率暫不計算。汽柴油兩期合計約706萬噸（17.7%），由成品油收率減去航煤推算。'],
+   diesel:[null,'柴油產量未查到。汽柴油兩期合計約706萬噸（17.7%），由成品油收率減去航煤推算。'],
+   pp:[180,'一期90＋二期90。按裝置產能計；丙烯還來自丙烷脫氫，並分給環氧丙烷、丙烯腈等，實際出率以排產為準。'],pe:[195,'一期HDPE 30＋LLDPE 45；二期HDPE 35＋LLDPE 45＋LDPE 40。'],eva:[30],pc:[52],
+   eoeg:[80],sm:[120,'苯乙烯60＋PO/SM聯產60。'],po:[27],abs:[40]}},
+ hengli:{oil:{lo:40,hi:50,t:'40–50%',note:'恆力沒有固定的產品結構，按市場每天調整汽油、航煤、柴油和化工料的分配，所以公開口徑從15%到53%都有：設計產品表約50%，新華社2025年報導約20%。粗略比較取40%–50%。'},
+  q:{cdu:[2000],rhc:[640],ccr:[960],pdh:[130,'待核實。'],cracker:[150,'乙烯產能。裂解裝置設計乙烯收率48%、雙烯（乙烯＋丙烯）收率60%，均以裂解原料計。'],ethylene:[150],aro:[434,'設計PX產量。'],px:[434],benzene:[97],
+   naph:[163,'化工輕油，送乙烯裂解。'],gasoline:[461,'設計產品表；實際隨每日排產變動。'],jet:[371,'設計產品表；實際隨每日排產變動。'],diesel:[161,'設計產品表；實際隨每日排產變動。'],eoeg:[180,'2×90。'],pe:[40],sm:[72],pp:[null,'乙烯配套42.26萬噸，加上STPP 20萬噸、JPP 20萬噸等專用料，合計約80–85萬噸。部分丙烯來自混合脫氫裝置，按原油算出率不可靠，暫不計算。'],c4:[14,'丁二烯。'],
+   pta:[1200,'PTA需要的PX超過本廠產量，部分外購，不計出率。',1]}},
+ shenghong:{oil:{lo:31,hi:31,t:'31%',note:'研報產品方案：汽油277.6＋航煤169.7＋柴油48.8＝496萬噸。環評階段約51%，2021年方案調整後降到31%。'},
+  q:{cdu:[1600],dhc:[360],vhc:[350],rhc:[330],ccr:[930],cracker:[110,'乙烯產能。'],ethylene:[110],aro:[280,'PX產能。'],px:[280],
+   gasoline:[277.6],jet:[169.7],diesel:[48.8],eoeg:[190],sm:[45],po:[20],phenol:[40,'苯酚40＋丙酮25。'],
+   eva:[30,'斯爾邦，原料不來自原油，不計出率。',1],mma:[17,'斯爾邦，原料不來自原油，不計出率。',1],pdh:[70,'斯爾邦外購丙烷，不計出率。',1]}},
+ yulong:{oil:{lo:18,hi:40,t:'18–40%',note:'柔性設計，成品油比例可在18%到40%之間調整，沒有單一設計值。'},
+  q:{cdu:[2000],nht:[260],dhc:[360],vhc:[200],fcc:[400],rhc:[780],ccr:[520],cracker:[300,'乙烯產能。'],ethylene:[300],
+   aro:[300,'混合芳烴。'],px:[300,'混二甲苯。'],c4:[20,'丁二烯。'],pp:[190,'環評口徑4×40＋30。'],
+   pe:[90,'全密度50＋HDPE 30＋超高分子量10，不含EVA/LDPE。'],eoeg:[160,'2×80。'],sm:[115,'EB/SM 50＋PO/SM 65。'],po:[30],acn:[26],abs:[60]}},
+ huajin:{oil:{lo:29.7,hi:29.7,t:'約30%',note:'設計成品油收率約29%到30%，年產約446萬噸。'},
+  q:{cdu:[1500],gas:[350],dhc:[370],vhc:[250],fcc:[420],rhc:[500],coker:[160],cracker:[165,'乙烯產能。'],ethylene:[165],
+   aro:[200,'PX產能。'],px:[200],eoeg:[59,'環氧乙烷/乙二醇。'],pp:[100,'2×50。'],pe:[110,'2×45全密度＋20 HDPE。'],sm:[70]}}
+};
+const fmtQ=q=>String(Math.round(q*10)/10);
+function yinfo(p,id){
+  const e=YIELD[p.id]&&YIELD[p.id].q[id];if(!e)return null;
+  const [q,note,no]=e;return{q,note:note||'',no:!!no,feed:FEED.has(id),pct:q!=null&&!no?q/(+p.cap)*100:null};
+}
+function boxSub(p,id){
+  const info=p.n[id];let s=Array.isArray(info)?info[0]:(info||'');const y=yinfo(p,id);
+  if(!y)return s;if(!s&&y.q!=null)s=fmtQ(y.q);
+  return y.pct!=null?(s?s+' · ':'')+y.pct.toFixed(1)+'%':s;
+}
+function yieldLine(p,id){
+  const y=yinfo(p,id);if(!y)return '';
+  let t;
+  if(y.q==null)t='';
+  else if(y.no)t=`${fmtQ(y.q)} 萬噸/年，不計出率。`;
+  else if(y.feed)t=`處理量 ${fmtQ(y.q)} ÷ 原油 ${p.cap} ＝ ${y.pct.toFixed(1)}%（裝置規模佔原油加工量）。`;
+  else t=`出率 ${y.pct.toFixed(1)}%＝${fmtQ(y.q)} ÷ ${p.cap} 萬噸原油（設計產能口徑）。`;
+  return [t,y.no?y.note.replace('不計出率。',''):y.note].filter(Boolean).join(' ');
+}
 
 /* ---------- 狀態 ---------- */
 const $=id=>document.getElementById(id);
@@ -360,16 +406,24 @@ const hint=document.createElement('span');hint.className='hint';hint.setAttribut
 
 /* ---------- 規模 ---------- */
 function renderMetrics(ps){
-  const num=(p,i)=>+p.kpi[i][1];
+  const yp=(p,id)=>{const y=yinfo(p,id);return y&&y.pct!=null?y.pct:null};
+  const sumY=ids=>p=>{const v=ids.map(id=>yp(p,id));return v.every(x=>x!=null)?v.reduce((a,b)=>a+b,0):null};
+  const pct=v=>v.toFixed(1)+'%';
   const defs=[
-    ['原油加工',p=>num(p,0),v=>v],['芳烴（PX）',p=>num(p,1),v=>v],['乙烯',p=>num(p,2),v=>v],
-    ['每百噸原油配套的乙烯',p=>num(p,2)/num(p,0)*100,v=>v.toFixed(1)+' 噸'],
-    ['每百噸原油配套的芳烴',p=>num(p,1)/num(p,0)*100,v=>v.toFixed(1)+' 噸']];
+    ['原油加工（萬噸/年）',p=>+p.cap,v=>v],
+    ['成品油收率',p=>YIELD[p.id].oil.hi,(v,p)=>YIELD[p.id].oil.t],
+    ['PX 出率',p=>yp(p,'px'),pct],['乙烯 出率',p=>yp(p,'ethylene'),pct],
+    ['聚烯烴（PP＋PE）出率',sumY(['pp','pe']),pct],['乙二醇 出率',p=>yp(p,'eoeg'),pct]];
   $('metrics').innerHTML=defs.map(([t,f,fmt])=>{
-    const max=Math.max(...PLANTS.map(f));
-    return `<div class="metric"><h3>${t}</h3>${ps.map(p=>`<div class="bar" style="--c:${p.color}"><span class="nm">${esc(short(p))}</span><span class="t"><span class="f" style="width:${(f(p)/max*100).toFixed(1)}%;display:block"></span></span><span class="v">${fmt(f(p))}</span></div>`).join('')}</div>`;
+    const max=Math.max(...PLANTS.map(p=>f(p)||0));
+    return `<div class="metric"><h3>${t}</h3>${ps.map(p=>{const v=f(p),lo=t==='成品油收率'?YIELD[p.id].oil.lo:v;
+      return `<div class="bar" style="--c:${p.color}"><span class="nm">${esc(short(p))}</span><span class="t">${v==null?'':`<span class="f" style="width:${(v/max*100).toFixed(1)}%;display:block;${lo!==v?`background:linear-gradient(90deg,var(--c) ${(lo/v*100).toFixed(0)}%,transparent ${(lo/v*100).toFixed(0)}%);box-shadow:inset 0 0 0 1.5px var(--c)`:''}"></span>`}</span><span class="v">${v==null?'—':fmt(v,p)}</span></div>`}).join('')}</div>`;
   }).join('');
-  $('mnote').textContent=ps.some(p=>p.id==='yulong')?'裕龍的芳烴一欄是300萬噸混合芳烴（混二甲苯），不是對二甲苯；一期沒有建PX裝置。':'';
+  const n=['出率＝設計產能÷原油加工能力。'];
+  if(ps.some(p=>p.id==='yulong'))n.push('裕龍的PX一欄是混合芳烴（混二甲苯），一期沒有建PX；成品油是18%到40%的柔性區間，空心部分為可調範圍。');
+  if(ps.some(p=>p.id==='hengli'))n.push('恆力每天調整產品結構，成品油公開口徑從15%到53%都有，這裡取40%–50%粗比；聚丙烯有部分丙烯來自脫氫，不計出率。');
+  if(ps.some(p=>p.id==='zpc'))n.push('浙石化聚丙烯按兩期裝置產能計，實際分配隨排產變化。');
+  $('mnote').textContent=n.join(' ');
 }
 
 /* ---------- 主要區別 ---------- */
@@ -464,7 +518,7 @@ function show(id){
     if(x.b===id)nodesEl[x.a].classList.add('on');if(x.a===id)nodesEl[x.b].classList.add('on')}
   tip.innerHTML=`<h3>${esc(L.n)}<span>${esc(L.e)}</span></h3><p>${esc(L.d)} ${esc(L.u)}</p><ul>${ps.map(p=>{
     if(!has(p,id))return `<li class="no"><i class="dot"></i><span><b>${esc(short(p))}</b>：沒有</span></li>`;
-    const alt=lab(p,id)!==L.n?lab(p,id):'',t=[alt,capText(sub(p,id)),note(p,id)].filter(Boolean).join('。')||'有，規模未查到';
+    const alt=lab(p,id)!==L.n?lab(p,id):'',t=[alt,capText(sub(p,id)),note(p,id),yieldLine(p,id)].filter(Boolean).join('。').replace(/。。/g,'。')||'有，規模未查到';
     return `<li style="--c:${p.color}"><i class="dot"></i><span><b>${esc(short(p))}</b>：${esc(t)}</span></li>`}).join('')}</ul>`;
   tip.hidden=false;
   const nr=nodesEl[id].getBoundingClientRect(),wr=wrap.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
@@ -486,15 +540,17 @@ function renderTable(ps){
   COLS.forEach((t,c)=>{
     const ids=Object.keys(LIB).filter(id=>LIB[id].c===c&&LIB[id].t!=='stream'&&ps.some(p=>has(p,id))).sort((a,b)=>LIB[a].r-LIB[b].r);
     const rows=ids.map(id=>{
-      const cells=ps.map(p=>has(p,id)?[lab(p,id)!==LIB[id].n?lab(p,id):'',sub(p,id),note(p,id)]:null);
+      const cells=ps.map(p=>{if(!has(p,id))return null;const y=yinfo(p,id);
+        return [lab(p,id)!==LIB[id].n?lab(p,id):'',sub(p,id)||(y&&y.q!=null?fmtQ(y.q):''),[note(p,id),y?y.note:''].filter(Boolean).join(' '),y&&y.pct!=null?y.pct:null,y&&y.feed]});
+      const pv=cells.map(x=>x&&x[3]).filter(v=>v!=null),top=pv.length>1?Math.max(...pv):null;
       const sig=cells.map(x=>x?'有|'+x[0]:'—'),df=new Set(sig).size>1;
       if(only&&!df)return '';
-      return `<tr class="${df?'df':''}"><th scope="row">${esc(LIB[id].n)}</th>${cells.map(x=>x?`<td><span class="c">${esc([x[0],x[1]].filter(Boolean).join(' ')||'✓')}</span>${x[2]?`<span class="x">${esc(x[2])}</span>`:''}</td>`:'<td class="n">—</td>').join('')}</tr>`;
+      return `<tr class="${df?'df':''}"><th scope="row">${esc(LIB[id].n)}</th>${cells.map(x=>x?`<td><span class="c">${esc([x[0],x[1]].filter(Boolean).join(' ')||'✓')}</span>${x[3]!=null?`<span class="yp${x[3]===top?' top':''}">${x[4]?'佔原油 ':'出率 '}${x[3].toFixed(1)}%</span>`:''}${x[2]?`<span class="x">${esc(x[2])}</span>`:''}</td>`:'<td class="n">—</td>').join('')}</tr>`;
     }).join('');
     if(rows)body+=`<tr class="grp"><th colspan="${ps.length+1}">${esc(t)}</th></tr>`+rows;
   });
   $('matrix').innerHTML=head+`<tbody>${body||`<tr><td colspan="${ps.length+1}" class="n">所選煉廠在這些項目上沒有差異。</td></tr>`}</tbody>`;
-  $('meta').innerHTML=head+'<tbody>'+[['所在地',p=>p.full],['股東',p=>p.meta[0][1]],['投產／進度',p=>p.meta[1][1]],['看點',p=>p.meta[3][1]]]
+  $('meta').innerHTML=head+'<tbody>'+[['所在地',p=>p.full],['股東',p=>p.meta[0][1]],['投產／進度',p=>p.meta[1][1]],['成品油口徑',p=>YIELD[p.id].oil.note],['看點',p=>p.meta[3][1]]]
     .map(([t,f])=>`<tr><th scope="row">${t}</th>${ps.map(p=>`<td>${esc(f(p))}</td>`).join('')}</tr>`).join('')+'</tbody>';
 }
 $('onlyDiffTab').addEventListener('change',()=>renderTable(S()));
