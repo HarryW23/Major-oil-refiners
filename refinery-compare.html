@@ -1,6 +1,6 @@
 <title>五大煉化對比</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* 版面：選廠 → 規模條形對比 → 自動列出的主要區別 → 疊加流程圖（圓點標示誰有這套裝置）→ 逐項對照表 */
 :root{
@@ -135,11 +135,12 @@ td .x{display:block;font-size:11.5px;color:var(--muted);max-width:26em}
 table.meta td{min-width:14em}
 .foot{font-size:12px;color:var(--muted);max-width:75em;margin:0}
 @media (prefers-reduced-motion:reduce){.edge,.node{transition:none}}
+.by{font-size:12px;font-weight:300;color:var(--muted);opacity:.75;margin-left:10px;letter-spacing:.03em;vertical-align:middle}
 </style>
 
 <div class="page">
   <header>
-    <h1>五大煉化對比</h1>
+    <h1>五大煉化對比<span class="by">@Harry汪</span></h1>
     <p class="lede">勾選要比較的煉廠（至少兩家），下面的規模、主要區別、流程圖和對照表會跟著更新。</p>
   </header>
 
@@ -182,7 +183,7 @@ table.meta td{min-width:14em}
     <div class="tscroll"><table class="meta" id="meta"></table></div>
   </section>
 
-  <p class="foot">出率＝設計產能÷原油加工能力，屬於設計口徑，實際運行會隨原油、負荷和檢修變化；加工裝置標的是處理量佔原油的比例，不是出率。規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。空白或「✓」表示有該裝置但未查到可靠規模；盛虹含斯爾邦、虹威、虹港等關聯公司的裝置，浙石化的PTA和PET在廠外。</p>
+  <p class="foot">出率＝設計產能÷原油加工能力，屬於設計口徑，實際運行會隨原油、負荷和檢修變化；加工裝置標的是處理量佔原油的比例，不是出率。規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。空白或「✓」表示有該裝置但未查到可靠規模；盛虹含斯爾邦、虹威、虹港等關聯公司的裝置，浙石化的PTA和PET在廠外。<br>By Harry汪</p>
 </div>
 
 <script>

@@ -1,6 +1,6 @@
 <title>五大煉化流程圖</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* 版面：頂部選廠 → 一行廠況 → 從左到右的工藝流程圖（原料→蒸餾→二次加工→化工→材料），圖在自己的橫向捲動容器內 */
 :root{
@@ -109,11 +109,12 @@ svg.focus .edge:not(.in):not(.out){opacity:.12}
 .tip .io .i{color:var(--in)} .tip .io .o{color:var(--out)}
 .foot{font-size:12px;color:var(--muted);max-width:75em}
 @media (prefers-reduced-motion:reduce){.edge,.node{transition:none}}
+.by{font-size:12px;font-weight:300;color:var(--muted);opacity:.75;margin-left:10px;letter-spacing:.03em;vertical-align:middle}
 </style>
 
 <div class="page">
   <header>
-    <h1>五大煉化一體化流程圖</h1>
+    <h1>五大煉化一體化流程圖<span class="by">@Harry汪</span></h1>
     <p class="lede">從原油到聚酯、塑料的加工路線。滑鼠停在任一方塊上（手機點一下），可看這一步做什麼、產物用在哪裡，以及它的進料和去向。</p>
   </header>
 
@@ -138,7 +139,7 @@ svg.focus .edge:not(.in):not(.out){opacity:.12}
     <div class="tip" id="tip" hidden></div>
   </div>
 
-  <p class="foot">規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。圖中只畫主幹物流，氫氣管網、燃料氣、公用工程等省略；同一欄內的虛線表示裝置之間的回煉料。出率＝設計產能÷原油加工能力，屬於設計口徑，實際運行會隨原油、負荷和檢修變化；加工裝置的百分比是處理量佔原油加工量的比例，不是出率。查不到可靠數字的方塊不顯示出率。</p>
+  <p class="foot">規模數字取自環評批復、公司公告和行業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。圖中只畫主幹物流，氫氣管網、燃料氣、公用工程等省略；同一欄內的虛線表示裝置之間的回煉料。出率＝設計產能÷原油加工能力，屬於設計口徑，實際運行會隨原油、負荷和檢修變化；加工裝置的百分比是處理量佔原油加工量的比例，不是出率。查不到可靠數字的方塊不顯示出率。<br>By Harry汪</p>
 </div>
 
 <script>
