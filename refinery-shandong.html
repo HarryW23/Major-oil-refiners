@@ -1,0 +1,369 @@
+<title>山東地煉流程圖</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* 版面：主幹從左到右（原油→常壓→減壓→催化→焦化），各裝置的汽柴油往下落進兩條「池」；油品按顏色區分；圖下方是一噸原油去向和兩個池的組成 */
+:root{
+  --bg:#f3f4f1; --surface:#ffffff; --ink:#1d2421; --muted:#66706b; --line:#d9ddd6; --soft:#eceee9;
+  --feed:#26302c; --feed-ink:#f6f7f4;
+  --gas:#4f86d9; --light:#d99a12; --mid:#23917f; --jet:#2f78a8; --heavy:#94704f; --coke:#4c524f; --chem:#8a63c9;
+  --gas-t:#e6eefb; --light-t:#fbf1dc; --mid-t:#ddf1ed; --jet-t:#e0edf6; --heavy-t:#f1e9e1; --coke-t:#e7e8e7; --chem-t:#efe8f8;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141816; --surface:#1d2320; --ink:#e7ebe8; --muted:#9aa49f; --line:#2f3733; --soft:#252c28;
+  --feed:#dfe5e1; --feed-ink:#141816;
+  --gas:#79a7ee; --light:#efb43a; --mid:#4cc2ad; --jet:#5fa5d4; --heavy:#c09a76; --coke:#a3aaa6; --chem:#b291ea;
+  --gas-t:#1d2a3d; --light-t:#352a12; --mid-t:#16302b; --jet-t:#18293a; --heavy-t:#33281e; --coke-t:#2a2e2c; --chem-t:#2a2238;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#141816; --surface:#1d2320; --ink:#e7ebe8; --muted:#9aa49f; --line:#2f3733; --soft:#252c28;
+  --feed:#dfe5e1; --feed-ink:#141816;
+  --gas:#79a7ee; --light:#efb43a; --mid:#4cc2ad; --jet:#5fa5d4; --heavy:#c09a76; --coke:#a3aaa6; --chem:#b291ea;
+  --gas-t:#1d2a3d; --light-t:#352a12; --mid-t:#16302b; --jet-t:#18293a; --heavy-t:#33281e; --coke-t:#2a2e2c; --chem-t:#2a2238;
+  color-scheme:dark }
+
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.6;
+  padding-block:28px 44px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{font-size:24px;font-weight:700;margin:0;letter-spacing:.03em}
+.by{font-size:12px;font-weight:300;color:var(--muted);opacity:.75;margin-left:10px;letter-spacing:.03em;vertical-align:middle}
+.lede{margin:4px 0 0;color:var(--muted);max-width:44em}
+.seg{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px;gap:2px}
+.seg button{font:inherit;font-weight:500;border:0;background:transparent;color:var(--muted);padding:7px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,30,25,.14)}
+.seg button:focus-visible,.node:focus-visible{outline:2px solid var(--gas);outline-offset:2px}
+
+.summary{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr);gap:20px;align-items:start}
+@media (max-width:820px){.summary{grid-template-columns:1fr}}
+.summary p{margin:0;color:var(--ink);max-width:40em}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--surface);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi b{font-family:var(--mono);font-weight:500;font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kpi b.light{color:var(--light)} .kpi b.mid{color:var(--mid)} .kpi b.coke{color:var(--coke)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px}
+
+.board{position:relative;background:var(--surface);border-radius:16px;padding:8px 0}
+.scroll{overflow-x:auto}
+svg{display:block;width:100%;min-width:1080px;height:auto;font-family:var(--font)}
+.flow{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s}
+.flow.dash{stroke-dasharray:2 7;stroke-width:3}
+.c-gas{stroke:var(--gas)} .c-light{stroke:var(--light)} .c-mid{stroke:var(--mid)} .c-jet{stroke:var(--jet)} .c-heavy{stroke:var(--heavy)} .c-coke{stroke:var(--coke)} .c-chem{stroke:var(--chem)}
+.flab{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round;transition:opacity .15s}
+.node{cursor:pointer;transition:opacity .15s}
+.node .card{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+.node.unit .card{stroke:var(--ink);stroke-opacity:.55}
+.node.feed .card{fill:var(--feed);stroke:var(--feed)}
+.node.tag .card{fill:var(--bg);stroke:var(--heavy);stroke-dasharray:4 3}
+.node .nm{font-size:14px;font-weight:700;text-anchor:middle;fill:var(--ink)}
+.node.feed .nm{fill:var(--feed-ink)}
+.node.tag .nm{font-size:12px;font-weight:500;fill:var(--heavy)}
+.node .ch{font-size:11px;font-family:var(--mono);text-anchor:middle;fill:var(--muted)}
+.node.feed .ch{fill:var(--feed-ink);opacity:.75}
+.node.prod .ch{font-weight:500}
+.pool .pn{font-size:13px;font-weight:700;fill:#fff;letter-spacing:.1em;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2px}
+.pool .pv{font-size:11px;font-family:var(--mono);fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2px}
+svg.focus .node:not(.on){opacity:.22}
+svg.focus .flow:not(.on){opacity:.1}
+svg.focus .flab:not(.on){opacity:0}
+.flow.on{stroke-width:4.5}
+
+.tip{position:absolute;z-index:5;width:310px;max-width:calc(100% - 16px);background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;pointer-events:auto;
+  box-shadow:0 10px 30px rgba(20,30,25,.18);display:flex;flex-direction:column;gap:8px}
+.tip h3{margin:0;font-size:15px}
+.tip h3 span{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
+.tip .yl{font-family:var(--mono);font-size:12.5px;background:var(--soft);border-radius:6px;padding:5px 8px}
+.tip p{margin:0}
+.tip b.k{display:block;font-size:11px;color:var(--muted);letter-spacing:.1em;font-weight:500}
+.tip ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.tip li{display:flex;justify-content:space-between;gap:10px;font-size:12.5px}
+.tip li span:last-child{font-family:var(--mono)}
+.tip .io{font-size:12px;border-top:1px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:2px;color:var(--muted)}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.panel{background:var(--surface);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2{font-size:15px;margin:0}
+.panel h2 small{font-weight:400;color:var(--muted);font-size:12px;margin-left:8px}
+.stack{display:flex;height:30px;border-radius:8px;overflow:hidden;gap:2px}
+.stack div{height:100%;min-width:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);font-family:var(--mono);white-space:nowrap;overflow:hidden}
+.keys{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}
+.keys span{display:inline-flex;align-items:center;gap:6px}
+.keys i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.keys b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.pools{display:flex;flex-direction:column;gap:14px}
+.prow{display:flex;flex-direction:column;gap:6px}
+.prow .t{font-size:13px;font-weight:500}
+.panel ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
+.foot{font-size:12px;color:var(--muted);max-width:75em;margin:0}
+@media (prefers-reduced-motion:reduce){.flow,.node,.flab{transition:none}}
+</style>
+
+<div class="page">
+  <header>
+    <div>
+      <h1>山東地煉流程圖<span class="by">@Harry汪</span></h1>
+      <p class="lede">一噸原油在山東地煉裡怎麼走：主線從常壓、減壓到催化、焦化，各裝置產出的汽油、柴油匯進兩個調和池。滑鼠停在方塊上看說明，可以移進說明框裡閱讀。</p>
+    </div>
+    <div class="seg" role="group" aria-label="選擇配置">
+      <button type="button" id="m-fuel" data-m="fuel">傳統燃料型</button>
+      <button type="button" id="m-up" data-m="up">轉型升級型</button>
+    </div>
+  </header>
+
+  <section class="summary">
+    <p id="mdesc"></p>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="legend">
+    <span><i style="background:var(--light)"></i>汽油系（石腦油、汽油）</span>
+    <span><i style="background:var(--mid)"></i>柴油系</span>
+    <span><i style="background:var(--heavy)"></i>重油（渣油、蠟油、油漿）</span>
+    <span><i style="background:var(--gas)"></i>液化氣</span>
+    <span><i style="background:var(--coke)"></i>石油焦</span>
+    <span id="lg-up"><i style="background:var(--jet)"></i>航煤 <i style="background:var(--chem);margin-left:8px"></i>化工品</span>
+    <span>方塊內：規模（萬噸/年）· 佔原油的典型比例</span>
+  </div>
+
+  <div class="board" id="board">
+    <div class="scroll" id="scroll"><svg id="svg" viewBox="0 0 1250 600" role="img" aria-label="山東地煉工藝流程圖"></svg></div>
+    <div class="tip" id="tip" hidden></div>
+  </div>
+
+  <div class="split">
+    <section class="panel">
+      <h2>一噸原油的去向<small>典型值示意，%</small></h2>
+      <div class="stack" id="fate"></div>
+      <div class="keys" id="fatekeys"></div>
+    </section>
+    <section class="panel">
+      <h2>調和池組成<small>各裝置貢獻的比例，典型值示意</small></h2>
+      <div class="pools" id="poolbars"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>山東地煉概況</h2>
+    <ul>
+      <li>2024年11月山東地煉產能約1.17億噸/年，佔全省煉能的66%；獨立煉廠從2015年的37家減到2024年的19家。</li>
+      <li>2025年平均開工率約52%，明顯低於主營煉廠的72%左右，主要卡在原油進口配額和成品油利潤。</li>
+      <li>原油配額不夠時，地煉用不佔配額的燃料油、稀釋瀝青、外購蠟油頂替，所以渣油比例高、焦化規模大、石油焦多。</li>
+      <li>整合與淘汰：裕龍島項目整合10家地煉、退出約2700萬噸產能；200萬噸/年以下的小煉廠按要求在2025年底前淘汰。省內目標是把地煉產能壓到9000萬噸左右，成品油收率降到40%左右。</li>
+      <li>2026年原油非國營貿易進口配額總量持平，新增部分主要給了大型一體化項目，中小地煉配額被削減；成品油出口配額沒有給山東地煉。</li>
+    </ul>
+  </section>
+
+  <p class="foot">圖中百分比是典型地煉的經驗區間（佔原油加工量），不是某一家企業的實測或設計數據，各廠隨原油品質、重質原料摻煉比例、裝置配置和負荷差別很大。加工裝置標的是處理量佔原油的比例；「一噸原油的去向」和「調和池組成」按區間中值示意，合計為100%。行業數據取自金聯創、隆眾等機構的公開報導，口徑不完全一致。乾氣、氫氣、硫磺回收和公用工程未畫出。<br>By Harry汪</p>
+</div>
+
+<script>
+/* ---------- 節點：x,y 為中心；y_ 為各配置佔原油的比例，s 為規模；m:'up' 只在轉型型出現 ---------- */
+const N={
+ crude:{x:70,y:230,w:110,k:'feed',n:'進口原油',e:'Imported crude',s:{fuel:'300–600',up:'500–1000'},
+  d:'地煉主要原料，靠非國營貿易進口配額取得。',u:'配額收緊時開工率隨之下降。'},
+ cdu:{x:210,y:230,k:'unit',n:'常壓蒸餾',e:'CDU',y_:{fuel:'100%',up:'100%'},
+  d:'原油加熱到約360°C，在常壓塔內按沸點切割，不發生化學反應。',u:'塔頂出液化氣和石腦油（約220°C以前），側線出柴油，塔底的常壓渣油（地煉習慣叫燃料油）去減壓。'},
+ fo:{x:310,y:320,w:130,h:38,k:'tag',n:'外購燃料油·稀釋瀝青',e:'Fuel oil / dilbit',
+  d:'不佔原油配額的重質原料，包括進口燃料油、稀釋瀝青、外購渣油。',u:'和常壓渣油一起進減壓塔。摻得越多，渣油越多，石油焦和焦化負荷越大。'},
+ vdu:{x:460,y:230,k:'unit',n:'減壓蒸餾',e:'VDU',y_:{fuel:'55–65%',up:'50–60%'},
+  d:'在真空下繼續蒸餾常壓渣油，避免高溫結焦。',u:'側線出少量減壓柴油（減一線）和蠟油（360–540°C），塔底是減壓渣油。'},
+ vgoin:{x:560,y:150,w:110,h:38,k:'tag',n:'外購蠟油',e:'Purchased VGO',
+  d:'從別的煉廠或貿易商買進的蠟油。',u:'直接補進催化裂化，提高催化負荷。'},
+ ref:{x:330,y:70,k:'unit',n:'催化重整',e:'Reformer',s:{fuel:'40–100',up:'60–150'},y_:{fuel:'10–14%',up:'12–16%'},
+  d:'把石腦油中的環烷烴、鏈烷烴轉成芳烴，辛烷值從60多提高到90以上。',u:'重整汽油是高辛烷值調和組分；副產氫氣，供加氫精製使用。'},
+ aro:{x:520,y:70,k:'prod',c:'chem',n:'芳烴',e:'BTX',m:'up',y_:{up:'4–7%'},
+  d:'從重整生成油抽提苯、甲苯、二甲苯。',u:'外售做化工原料，抽餘油做溶劑油。'},
+ fcc:{x:710,y:230,k:'unit',n:'催化裂化',e:'FCC',s:{fuel:'120–250',up:'150–300'},y_:{fuel:'28–35%',up:'22–30%'},
+  d:'蠟油在催化劑上裂化，不耗氫。地煉的核心裝置。',u:'產催化汽油、催化柴油、富含丙烯的液化氣，塔底剩油漿（油渣）去焦化或做燃料油。'},
+ hcu:{x:610,y:390,w:130,k:'unit',n:'加氫裂化',e:'Hydrocracker',m:'up',s:{up:'100–200'},y_:{up:'8–15%'},
+  d:'蠟油在高壓氫氣下裂化。',u:'多產航煤，少產柴油，是地煉壓減柴油的主要手段。'},
+ lpgu:{x:840,y:70,k:'unit',n:'氣分·MTBE',e:'Gas plant / MTBE',y_:{fuel:'5–7%',up:'6–8%'},
+  d:'液化氣脫硫後分出丙烯、C4；C4裡的異丁烯和甲醇做成MTBE，剩下的C4可做烷基化油。',u:'MTBE和烷基化油回汽油池；丙烯外售或做聚丙烯；其餘做民用液化氣。'},
+ coker:{x:960,y:230,k:'unit',n:'延遲焦化',e:'Delayed coker',s:{fuel:'100–200',up:'100–200'},y_:{fuel:'33–42%',up:'25–35%'},
+  d:'渣油和油漿高溫熱裂化，把碳以石油焦的形式脫掉。投資低，能吃最差的原料。',u:'產焦化汽油、焦化柴油（都要加氫）、焦化蠟油（回催化）和石油焦。'},
+ coke:{x:1160,y:230,k:'prod',c:'coke',n:'石油焦',e:'Petcoke',y_:{fuel:'8–12%',up:'6–9%'},
+  d:'焦化裝置的固體產物。',u:'低硫焦做預焙陽極、負極材料；高硫焦作燃料。'},
+ pp:{x:1160,y:62,k:'prod',c:'chem',n:'丙烯·聚丙烯',e:'Propylene / PP',m:'up',y_:{up:'2–4%'},
+  d:'氣分出來的丙烯，部分企業自建聚丙烯。',u:'注塑件、薄膜、纖維。'},
+ lpg:{x:1160,y:140,k:'prod',c:'gas',n:'液化氣',e:'LPG',y_:{fuel:'4–6%',up:'3–5%'},
+  d:'提走丙烯和C4後剩下的液化氣。',u:'民用和工業燃料。'},
+ jet:{x:1160,y:390,k:'prod',c:'jet',n:'航空煤油',e:'Jet fuel',m:'up',y_:{up:'5–9%'},
+  d:'加氫裂化的煤油餾分。',u:'航空燃料，需求增長比汽柴油好。'},
+ gas:{x:1160,y:470,k:'prod',c:'light',n:'汽油',e:'Gasoline',y_:{fuel:'25–30%',up:'22–27%'},
+  d:'汽油池各組分經加氫脫硫後調和成國六汽油。',u:'車用燃料。'},
+ dsl:{x:1160,y:545,k:'prod',c:'mid',n:'柴油',e:'Diesel',y_:{fuel:'36–42%',up:'27–33%'},
+  d:'柴油池各組分經加氫精製後調和成國六柴油。',u:'地煉傳統上最大的產品，近年需求見頂，是減產重點。'},
+ gpool:{pool:1,x1:130,x2:1010,y:470,c:'light',n:'汽油池',e:'Gasoline pool',d:'各裝置產出的汽油組分在這裡匯合，加氫脫硫後調和。',u:'辛烷值靠重整汽油和MTBE、烷基化油拉高。'},
+ dpool:{pool:1,x1:130,x2:1010,y:545,c:'mid',n:'柴油池',e:'Diesel pool',d:'各裝置產出的柴油組分在這裡匯合，加氫精製後調和。',u:'直餾柴油品質最好，催化柴油、焦化柴油要深度加氫。'}
+};
+/* ---------- 物流：p 為折線點；l/lx/ly 為標籤 ---------- */
+const E=[
+ {f:'crude',t:'cdu',c:'heavy',p:[[125,230],[140,230]]},
+ {f:'cdu',t:'vdu',c:'heavy',p:[[280,230],[390,230]],l:'常壓渣油（燃料油）',lx:335,ly:218,a:'middle'},
+ {f:'fo',t:'vdu',c:'heavy',p:[[310,301],[310,236]],dash:1},
+ {f:'cdu',t:'ref',c:'light',p:[[210,201],[210,70],[260,70]],l:'石腦油 ≤220°C',lx:216,ly:110},
+ {f:'ref',t:'aro',c:'chem',p:[[400,70],[450,70]],m:'up'},
+ {f:'vdu',t:'fcc',c:'heavy',p:[[530,230],[640,230]],l:'蠟油',lx:605,ly:218,a:'middle'},
+ {f:'vgoin',t:'fcc',c:'heavy',p:[[560,169],[560,224]],dash:1},
+ {f:'vdu',t:'hcu',c:'heavy',p:[[610,230],[610,361]],m:'up'},
+ {f:'vdu',t:'coker',c:'heavy',p:[[480,259],[480,330],[915,330],[915,259]],l:'減壓渣油（油渣）',lx:488,ly:322},
+ {f:'fcc',t:'coker',c:'heavy',p:[[780,230],[890,230]],l:'油漿',lx:835,ly:218,a:'middle'},
+ {f:'coker',t:'fcc',c:'heavy',p:[[910,201],[910,172],[745,172],[745,201]],dash:1,l:'焦化蠟油回催化',lx:828,ly:165,a:'middle'},
+ {f:'coker',t:'coke',c:'coke',p:[[1030,230],[1090,230]]},
+ {f:'fcc',t:'lpgu',c:'gas',p:[[710,201],[710,70],[770,70]],l:'液化氣',lx:716,ly:110},
+ {f:'coker',t:'lpgu',c:'gas',p:[[950,201],[950,132],[880,132],[880,99]]},
+ {f:'lpgu',t:'pp',c:'chem',p:[[910,62],[1090,62]],m:'up',l:'丙烯',lx:1000,ly:55,a:'middle'},
+ {f:'lpgu',t:'lpg',c:'gas',p:[[910,84],[1040,84],[1040,140],[1090,140]]},
+ {f:'hcu',t:'jet',c:'jet',p:[[675,390],[1090,390]],m:'up',l:'航煤',lx:1050,ly:382,a:'middle'},
+ /* 落入汽油池 */
+ {f:'ref',t:'gpool',c:'light',p:[[385,99],[385,452]],l:'重整汽油',lx:391,ly:446},
+ {f:'fcc',t:'gpool',c:'light',p:[[690,259],[690,452]],l:'催化汽油',lx:696,ly:446},
+ {f:'lpgu',t:'gpool',c:'light',p:[[860,99],[860,452]],l:'MTBE·烷基化油',lx:866,ly:446},
+ {f:'coker',t:'gpool',c:'light',p:[[965,259],[965,452]],l:'焦化汽油',lx:959,ly:425,a:'end'},
+ /* 落入柴油池 */
+ {f:'cdu',t:'dpool',c:'mid',p:[[210,259],[210,527]],l:'直餾柴油',lx:216,ly:520},
+ {f:'vdu',t:'dpool',c:'mid',p:[[430,259],[430,527]],l:'減一線',lx:436,ly:520},
+ {f:'hcu',t:'dpool',c:'mid',p:[[610,419],[610,527]],m:'up',l:'加氫裂化柴油',lx:616,ly:520},
+ {f:'fcc',t:'dpool',c:'mid',p:[[730,259],[730,527]],l:'催化柴油',lx:736,ly:520},
+ {f:'coker',t:'dpool',c:'mid',p:[[1000,259],[1000,527]],l:'焦化柴油',lx:1006,ly:425},
+ /* 池到成品 */
+ {f:'gpool',t:'gas',c:'light',p:[[1012,470],[1090,470]],l:'加氫·調和',lx:1050,ly:458,a:'middle'},
+ {f:'dpool',t:'dsl',c:'mid',p:[[1012,545],[1090,545]],l:'加氫·調和',lx:1050,ly:533,a:'middle'}
+];
+/* ---------- 各配置的數字（中值示意，合計100%） ---------- */
+const MODES={
+ fuel:{desc:'山東地煉的主流配置：常減壓配催化裂化和延遲焦化，靠脫碳轉化渣油，產品以汽油、柴油為主。投資低、原料適應性強，但液體收率低、石油焦多，柴油比例偏高。',
+  kpi:[['成品油收率','63–72%',''],['汽油','25–30%','light'],['柴油','36–42%','mid'],['石油焦','8–12%','coke']],
+  fate:[['汽油',28,'light'],['柴油',40,'mid'],['液化氣',5,'gas'],['石油焦',10,'coke'],['乾氣·自用·損失',8,'heavy'],['其他',9,'soft']],
+  pools:{gpool:[['催化汽油',48],['重整汽油',34],['焦化汽油',14],['MTBE',4]],dpool:[['直餾柴油',60],['減一線',4],['催化柴油',16],['焦化柴油',20]]},
+  other:'其他：油漿和燃料油外售、道路瀝青、外售石腦油、硫磺等。'},
+ up:{desc:'在燃料型的基礎上加加氫裂化和丙烯、芳烴下游，走「減油增化」：柴油明顯減少，多出航煤、芳烴和聚丙烯，焦化負荷也降下來。成品油收率仍遠高於大型一體化煉廠的30%左右。',
+  kpi:[['成品油收率','55–65%',''],['汽油','22–27%','light'],['柴油','27–33%','mid'],['石油焦','6–9%','coke']],
+  fate:[['汽油',25,'light'],['柴油',30,'mid'],['航煤',7,'jet'],['化工品',9,'chem'],['液化氣',5,'gas'],['石油焦',8,'coke'],['乾氣·自用·損失',9,'heavy'],['其他',7,'soft']],
+  pools:{gpool:[['催化汽油',46],['重整汽油',32],['焦化汽油',12],['MTBE·烷基化油',10]],dpool:[['直餾柴油',60],['減一線',3],['催化柴油',17],['焦化柴油',17],['加氫裂化柴油',3]]},
+  other:'其他：油漿和燃料油外售、道路瀝青、溶劑油、硫磺等。'}
+};
+const FEED=new Set(['cdu','vdu','ref','fcc','hcu','lpgu','coker']);
+const POOLSHADE={gpool:['var(--light)','#b57d06','#f0c35a','#7d5703','#f6d892'],dpool:['var(--mid)','#1a6f61','#5cc0ae','#0f4c42','#9ad8cc']};
+
+/* ---------- 繪圖 ---------- */
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('svg'),tip=document.getElementById('tip'),board=document.getElementById('board');
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let mode='fuel',nodesEl={},edgesEl=[],pinned=null,hideT=null,showT=null;
+const vis=o=>!o.m||o.m===mode;
+const poolTotal=id=>N[id==='gpool'?'gas':'dsl'].y_[mode];
+function path(pts){
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length-1;i++){const a=pts[i-1],b=pts[i],c=pts[i+1],l1=Math.hypot(b[0]-a[0],b[1]-a[1]),l2=Math.hypot(c[0]-b[0],c[1]-b[1]),r=Math.min(10,l1/2,l2/2);
+    d+=`L${b[0]+(a[0]-b[0])/l1*r},${b[1]+(a[1]-b[1])/l1*r}Q${b[0]},${b[1]} ${b[0]+(c[0]-b[0])/l2*r},${b[1]+(c[1]-b[1])/l2*r}`}
+  const z=pts[pts.length-1];return d+`L${z[0]},${z[1]}`;
+}
+function chipText(o){
+  const s=o.s&&o.s[mode],y=o.y_&&o.y_[mode];
+  if(o.k==='feed')return s?s+' 萬噸/年':'';
+  return [s,y].filter(Boolean).join(' · ');
+}
+function draw(){
+  hide();svg.innerHTML='';nodesEl={};edgesEl=[];
+  const defs=el('defs',{},svg);
+  for(const c of ['gas','light','mid','jet','heavy','coke','chem']){const m=el('marker',{id:'a-'+c,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:9,markerHeight:9,orient:'auto',markerUnits:'userSpaceOnUse'},defs);el('path',{d:'M1,1.5L9,5L1,8.5z',style:`fill:var(--${c})`},m)}
+  const gF=el('g',{},svg),gP=el('g',{},svg),gL=el('g',{},svg),gN=el('g',{},svg);
+  for(const e of E){if(!vis(e))continue;
+    const pe=el('path',{d:path(e.p),class:`flow c-${e.c}${e.dash?' dash':''}`,'marker-end':`url(#a-${e.c})`},gF);
+    let lab=null;if(e.l){lab=el('text',{x:e.lx,y:e.ly,class:'flab','text-anchor':e.a||'start'},gL);lab.textContent=e.l}
+    edgesEl.push({e:pe,lab,f:e.f,t:e.t,l:e.l||''});
+  }
+  for(const id in N){const o=N[id];if(!vis(o))continue;
+    let g;
+    if(o.pool){
+      g=el('g',{class:'node pool','data-id':id,tabindex:0,role:'button','aria-label':o.n},gP);
+      el('rect',{x:o.x1,y:o.y-13,width:o.x2-o.x1,height:26,rx:13,style:`fill:var(--${o.c})`},g);
+      el('text',{x:o.x1+16,y:o.y+5,class:'pn'},g).textContent=o.n;
+      el('text',{x:o.x1+80,y:o.y+4,class:'pv'},g).textContent='佔原油 '+poolTotal(id);
+    }else{
+      const w=o.w||140,h=o.h||58;
+      g=el('g',{class:`node ${o.k}`,'data-id':id,tabindex:0,role:'button','aria-label':o.n,transform:`translate(${o.x-w/2},${o.y-h/2})`},gN);
+      const r=el('rect',{class:'card',width:w,height:h,rx:o.k==='tag'?8:12},g);
+      if(o.k==='prod')r.setAttribute('style',`fill:var(--${o.c}-t);stroke:var(--${o.c})`);
+      const chip=chipText(o);
+      el('text',{x:w/2,y:chip?h/2-3:h/2+5,class:'nm'},g).textContent=o.n;
+      if(chip){const t=el('text',{x:w/2,y:h/2+15,class:'ch'},g);t.textContent=chip;if(o.k==='prod')t.setAttribute('style',`fill:var(--${o.c})`)}
+    }
+    nodesEl[id]=g;
+    g.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT);if(pinned)return;if(tip.hidden)show(id);else showT=setTimeout(()=>show(id),150)});
+    g.addEventListener('mouseleave',()=>{clearTimeout(showT);if(!pinned)hideSoon()});
+    g.addEventListener('focus',()=>{if(!pinned)show(id)});
+    g.addEventListener('blur',()=>{if(!pinned)hide()});
+    g.addEventListener('click',ev=>{ev.stopPropagation();if(pinned===id){pinned=null;hide()}else{pinned=id;show(id)}});
+    g.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pinned=null;hide()}});
+  }
+}
+const nm=id=>N[id].n;
+function show(id){
+  const o=N[id],M=MODES[mode];
+  svg.classList.add('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');nodesEl[id].classList.add('on');
+  const ins=[],outs=[];
+  for(const x of edgesEl){const on=x.f===id||x.t===id;x.e.classList.toggle('on',on);x.lab&&x.lab.classList.toggle('on',on);
+    if(x.t===id){nodesEl[x.f].classList.add('on');ins.push(nm(x.f)+(x.l?`（${x.l}）`:''))}
+    if(x.f===id){nodesEl[x.t].classList.add('on');outs.push(nm(x.t)+(x.l?`（${x.l}）`:''))}}
+  let yl='';
+  if(o.pool)yl=`佔原油 ${poolTotal(id)}，組成如下（中值示意）：`;
+  else{const y=o.y_&&o.y_[mode],s=o.s&&o.s[mode],parts=[];
+    if(s)parts.push(`規模 ${s} 萬噸/年`);
+    if(y)parts.push(FEED.has(id)?`處理量約佔原油 ${y}`:`出率約 ${y}（佔原油）`);
+    yl=parts.join('，');}
+  const comp=o.pool?`<ul>${M.pools[id].map(([n,v])=>`<li><span>${esc(n)}</span><span>${v}%</span></li>`).join('')}</ul>`:'';
+  const unit=FEED.has(id);
+  tip.innerHTML=`<h3>${esc(o.n)}<span>${esc(o.e)}</span></h3>${yl?`<div class="yl">${esc(yl)}</div>`:''}${comp}
+    <p><b class="k">${unit?'這一步做什麼':'是什麼'}</b>${esc(o.d)}</p><p><b class="k">${unit?'產物去向':'用處'}</b>${esc(o.u)}</p>
+    ${ins.length||outs.length?`<div class="io">${ins.length?`<span>← 來自：${esc(ins.join('、'))}</span>`:''}${outs.length?`<span>→ 去往：${esc(outs.join('、'))}</span>`:''}</div>`:''}`;
+  tip.hidden=false;
+  const nr=nodesEl[id].getBoundingClientRect(),wr=board.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left,top;
+  if(o.pool){left=Math.min(Math.max(4,nr.left-wr.left+40),wr.width-tw-4);top=nr.top-wr.top-th-10;if(top<4)top=nr.bottom-wr.top+10}
+  else{left=nr.right-wr.left+12;if(left+tw>wr.width-4)left=nr.left-wr.left-tw-12;if(left<4)left=Math.max(4,Math.min(wr.width-tw-4,nr.left-wr.left));
+    top=nr.top-wr.top-10;const over=left<nr.right-wr.left&&left+tw>nr.left-wr.left;if(over)top=nr.bottom-wr.top+10;
+    top=Math.max(4,Math.min(top,Math.max(4,wr.height-th-4)));
+    if(!over)top=Math.max(4,Math.min(top,window.innerHeight-wr.top-th-8));}
+  tip.style.left=left+'px';tip.style.top=top+'px';
+}
+function hide(){tip.hidden=true;svg.classList.remove('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');for(const x of edgesEl){x.e.classList.remove('on');x.lab&&x.lab.classList.remove('on')}}
+function hideSoon(){clearTimeout(hideT);hideT=setTimeout(()=>{if(!pinned)hide()},200)}
+tip.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT)});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideSoon()});
+tip.addEventListener('click',ev=>ev.stopPropagation());
+document.addEventListener('click',()=>{if(pinned){pinned=null;hide()}});
+document.getElementById('scroll').addEventListener('scroll',()=>{if(pinned)show(pinned)});
+
+/* ---------- 摘要、去向、調和池 ---------- */
+function panels(){
+  const M=MODES[mode];
+  document.getElementById('mdesc').textContent=M.desc;
+  document.getElementById('kpis').innerHTML=M.kpi.map(([t,v,c])=>`<div class="kpi"><span>${t}</span><b class="${c}">${v}</b></div>`).join('');
+  const col=c=>c==='soft'?'var(--muted)':`var(--${c})`;
+  document.getElementById('fate').innerHTML=M.fate.map(([n,v,c])=>`<div style="flex:${v};background:${col(c)}" title="${n} ${v}%">${v>=6?v+'%':''}</div>`).join('');
+  document.getElementById('fatekeys').innerHTML=M.fate.map(([n,v,c])=>`<span><i style="background:${col(c)}"></i>${n} <b>${v}%</b></span>`).join('')+`<span>${esc(M.other)}</span>`;
+  document.getElementById('poolbars').innerHTML=['gpool','dpool'].map(id=>{
+    const sh=POOLSHADE[id],list=M.pools[id];
+    return `<div class="prow"><span class="t">${N[id].n}<span style="color:var(--muted);font-weight:400;margin-left:8px">佔原油 ${poolTotal(id)}</span></span>
+      <div class="stack">${list.map(([n,v],i)=>`<div style="flex:${v};background:${sh[i]}" title="${n} ${v}%">${v>=10?v+'%':''}</div>`).join('')}</div>
+      <div class="keys">${list.map(([n,v],i)=>`<span><i style="background:${sh[i]}"></i>${n} <b>${v}%</b></span>`).join('')}</div></div>`}).join('');
+  document.getElementById('lg-up').hidden=mode!=='up';
+}
+function setMode(m){mode=MODES[m]?m:'fuel';pinned=null;
+  for(const b of document.querySelectorAll('.seg button'))b.setAttribute('aria-pressed',b.dataset.m===mode);
+  draw();panels();}
+for(const b of document.querySelectorAll('.seg button'))b.addEventListener('click',()=>{location.hash=b.dataset.m;setMode(b.dataset.m)});
+window.addEventListener('hashchange',()=>setMode(location.hash.slice(1)));
+setMode(location.hash.slice(1));
+</script>
