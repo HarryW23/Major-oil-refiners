@@ -18,9 +18,10 @@
 
 | 版本 | 內容 |
 |---|---|
+| v1.2.1 | 修正直接打開 HTML 文件（本地或 GitHub Pages）時詳情框不會消失、頁面左上角出現空框的問題；補上文檔聲明和字符編碼 |
 | v1.2 | 新增山東地煉流程圖（傳統燃料型、轉型升級型兩種配置，汽油池和柴油池組成） |
 | v1.1.1 | 詳情框改為可移入：滑鼠從方塊移到詳情框時不會消失，移出詳情框後才關閉；劃過其他方塊時不會立刻切換；詳情框盡量保持在視窗內 |
 | v1.1 | 每個方塊加入產量和出率；對比頁改為出率對比（成品油、PX、乙烯、聚烯烴、乙二醇），對照表標出每行最高出率；更新浙石化兩期聚烯烴、苯、乙二醇數據和恆力成品油、聚丙烯口徑；加入署名 |
 | v1.0 | 五廠流程圖和對比頁初版 |
 
-`main` 分支永遠是最新版本。舊版本保留在同名分支裡，例如 v1.0 在 [`v1.0` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.0)、v1.1 在 [`v1.1` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.1)、v1.1.1 在 [`v1.1.1` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.1.1)；在 GitHub 的分支下拉選單中切換即可查看或下載。
+`main` 分支永遠是最新版本。舊版本保留在同名分支裡，例如 v1.0 在 [`v1.0` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.0)、v1.1 在 [`v1.1` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.1)、v1.1.1 在 [`v1.1.1` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.1.1)、v1.2 在 [`v1.2` 分支](https://github.com/HarryW23/Major-oil-refiners/tree/v1.2)；在 GitHub 的分支下拉選單中切換即可查看或下載。

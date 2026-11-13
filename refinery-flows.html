@@ -1,7 +1,13 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>五大煉化流程圖</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+/* 直接打開文件時也要讓 hidden 生效（預覽外殼會自帶這條，獨立文件沒有） */
+[hidden]{display:none!important}
 /* 版面：頂部選廠 → 一行廠況 → 從左到右的工藝流程圖（原料→蒸餾→二次加工→化工→材料），圖在自己的橫向捲動容器內 */
 :root{
   --bg:#eef1f4; --surface:#ffffff; --ink:#16222e; --muted:#5b6b7a; --line:#c9d2db;
@@ -36,7 +42,7 @@
   --fuel:#232a47; --fuel-bd:#8c98dc;
   color-scheme:dark }
 
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
   padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .page{max-width:1720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 h1{font-size:22px;font-weight:700;margin:0;letter-spacing:.02em}

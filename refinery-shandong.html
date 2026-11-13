@@ -1,7 +1,13 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>山東地煉流程圖</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap">
 <style>
+/* 直接打開文件時也要讓 hidden 生效（預覽外殼會自帶這條，獨立文件沒有） */
+[hidden]{display:none!important}
 /* 版面：主幹從左到右（原油→常壓→減壓→催化→焦化），各裝置的汽柴油往下落進兩條「池」；油品按顏色區分；圖下方是一噸原油去向和兩個池的組成 */
 :root{
   --bg:#f3f4f1; --surface:#ffffff; --ink:#1d2421; --muted:#66706b; --line:#d9ddd6; --soft:#eceee9;
@@ -24,7 +30,7 @@
   --gas-t:#1d2a3d; --light-t:#352a12; --mid-t:#16302b; --jet-t:#18293a; --heavy-t:#33281e; --coke-t:#2a2e2c; --chem-t:#2a2238;
   color-scheme:dark }
 
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.6;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.6;
   padding-block:28px 44px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .page{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
