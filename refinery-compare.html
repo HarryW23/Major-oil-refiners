@@ -108,7 +108,7 @@ svg.focus .edge:not(.in):not(.out){opacity:.1}
 svg.focus .node.on{opacity:1}
 
 .tip{position:absolute;z-index:5;width:320px;max-width:calc(100% - 16px);background:var(--surface);color:var(--ink);
-  border:1px solid var(--unit-bd);border-radius:6px;padding:12px 14px;font-size:13px;pointer-events:none;
+  border:1px solid var(--unit-bd);border-radius:6px;padding:12px 14px;font-size:13px;pointer-events:auto;
   box-shadow:0 6px 22px rgba(10,20,30,.22);display:flex;flex-direction:column;gap:7px}
 .tip h3{margin:0;font-size:15px;font-weight:700}
 .tip h3 span{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
@@ -503,7 +503,7 @@ function renderMap(ps){
     ps.forEach((p,i)=>{const c=el('circle',{cx:NW/2+(i-(ps.length-1)/2)*12,cy:NH-11,r:4,class:'pd'+(has(p,id)?'':' off')},g);
       c.style.stroke=p.color;if(has(p,id))c.style.fill=p.color});
     nodesEl[id]=g;
-    g.addEventListener('mouseenter',()=>{if(!pinned)show(id)});g.addEventListener('mouseleave',()=>{if(!pinned)hide()});
+    g.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT);if(pinned)return;if(tip.hidden)show(id);else showT=setTimeout(()=>show(id),150)});g.addEventListener('mouseleave',()=>{clearTimeout(showT);if(!pinned)hideSoon()});
     g.addEventListener('focus',()=>{if(!pinned)show(id)});g.addEventListener('blur',()=>{if(!pinned)hide()});
     g.addEventListener('click',ev=>{ev.stopPropagation();if(pinned===id){pinned=null;hide()}else{pinned=id;show(id)}});
     g.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pinned=null;hide()}});
@@ -527,10 +527,17 @@ function show(id){
   if(left<4)left=Math.max(4,Math.min(wr.width-tw-4,nr.left-wr.left));
   let top=nr.top-wr.top-10;if(left<nr.right-wr.left&&left+tw>nr.left-wr.left)top=nr.bottom-wr.top+10;
   top=Math.max(4,Math.min(top,Math.max(4,wr.height-th-4)));
+  if(!(left<nr.right-wr.left&&left+tw>nr.left-wr.left))top=Math.max(4,Math.min(top,window.innerHeight-wr.top-th-8)); // 放在方塊旁邊時，盡量留在視窗內
   tip.style.left=left+'px';tip.style.top=top+'px';
 }
 function hide(){tip.hidden=true;svg.classList.remove('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');for(const x of edgesEl)x.e.classList.remove('in','out')}
 document.addEventListener('click',()=>{if(pinned){pinned=null;hide()}});
+/* 從方塊移到詳情框時保留詳情框，離開詳情框後才隱藏 */
+let hideT=null,showT=null;
+function hideSoon(){clearTimeout(hideT);hideT=setTimeout(()=>{if(!pinned)hide()},200)}
+tip.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT)});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideSoon()});
+tip.addEventListener('click',ev=>ev.stopPropagation());
 $('scroll').addEventListener('scroll',()=>{if(pinned)show(pinned)});
 $('onlyDiffMap').addEventListener('change',e=>svg.classList.toggle('onlydiff',e.target.checked));
 
