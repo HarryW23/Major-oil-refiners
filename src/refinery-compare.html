@@ -1,0 +1,576 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>五大煉化對比</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* 直接打開文件時也要讓 hidden 生效（預覽外殼會自帶這條，獨立文件沒有） */
+[hidden]{display:none!important}
+/* 版面：選廠 → 規模條形對比 → 自動列出的主要區別 → 疊加流程圖（圓點標示誰有這套裝置）→ 逐項對照表 */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --ink:#16222e; --muted:#5b6b7a; --line:#c9d2db; --soft:#f4f6f8;
+  --edge:#a3afbc; --in:#1f6fb5; --out:#c2571a; --diff:#fff4d6;
+  --feed:#22364a; --feed-ink:#ffffff; --unit:#ffffff; --unit-bd:#22364a;
+  --stream:#e3e8ee; --stream-bd:#aab6c3; --chem:#d9efe9; --chem-bd:#2b8a78;
+  --prod:#fbe9cf; --prod-bd:#b9792a; --fuel:#dfe3f3; --fuel-bd:#5b67a8;
+  --p0:#2563c9; --p1:#d2691e; --p2:#1f9a6d; --p3:#8b4fcf; --p4:#cf3f68;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#10161c; --surface:#19222b; --ink:#e6edf3; --muted:#94a3b3; --line:#2e3b48; --soft:#1f2933;
+  --edge:#4d5b6a; --in:#62aef0; --out:#f0965a; --diff:#3b3214;
+  --feed:#cfd9e3; --feed-ink:#10161c; --unit:#19222b; --unit-bd:#cfd9e3;
+  --stream:#232f3b; --stream-bd:#566575; --chem:#15332e; --chem-bd:#4bb7a2;
+  --prod:#3a2c15; --prod-bd:#d9a050; --fuel:#232a47; --fuel-bd:#8c98dc;
+  --p0:#6aa5f5; --p1:#f09a55; --p2:#4fc79a; --p3:#b58af0; --p4:#f07a9b;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#10161c; --surface:#19222b; --ink:#e6edf3; --muted:#94a3b3; --line:#2e3b48; --soft:#1f2933;
+  --edge:#4d5b6a; --in:#62aef0; --out:#f0965a; --diff:#3b3214;
+  --feed:#cfd9e3; --feed-ink:#10161c; --unit:#19222b; --unit-bd:#cfd9e3;
+  --stream:#232f3b; --stream-bd:#566575; --chem:#15332e; --chem-bd:#4bb7a2;
+  --prod:#3a2c15; --prod-bd:#d9a050; --fuel:#232a47; --fuel-bd:#8c98dc;
+  --p0:#6aa5f5; --p1:#f09a55; --p2:#4fc79a; --p3:#b58af0; --p4:#f07a9b;
+  color-scheme:dark }
+
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
+  padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page{max-width:1720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:22px;font-weight:700;margin:0;letter-spacing:.02em}
+.lede{margin:2px 0 0;color:var(--muted);max-width:62em}
+h2{font-size:16px;font-weight:700;margin:0}
+h2 small{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+
+.picker{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.picker .hint{color:var(--muted);font-size:12.5px;margin-left:4px}
+.pick{font:inherit;font-weight:500;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:4px;
+  padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.pick .dot{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
+.pick[aria-pressed="true"]{border-color:var(--c)}
+.pick[aria-pressed="true"] .dot{background:var(--c)}
+.pick[aria-pressed="false"]{color:var(--muted)}
+.pick small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.pick:focus-visible,.node:focus-visible,label.sw input:focus-visible{outline:2px solid var(--in);outline-offset:2px}
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px 24px}
+.metric{display:flex;flex-direction:column;gap:6px;min-width:0}
+.metric h3{margin:0;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.08em}
+.bar{display:grid;grid-template-columns:5.2em 1fr 4.6em;gap:8px;align-items:center;font-size:12.5px}
+.bar .t{background:var(--soft);height:14px;border-radius:2px;overflow:hidden}
+.bar .f{height:100%;background:var(--c);border-radius:2px}
+.bar .v{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.bar .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note{font-size:12px;color:var(--muted);margin:0}
+
+.diffs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.dcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dcard h3{margin:0;font-size:15px}
+.dcard h3 span{font-weight:400;font-size:12px;color:var(--muted);margin-left:6px}
+.dcard p{margin:0;font-size:13px}
+.dcard b.k{display:block;font-size:11px;color:var(--muted);letter-spacing:.1em;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:3px;padding:1px 7px;background:var(--soft)}
+.chip.no{text-decoration:line-through;color:var(--muted);background:transparent}
+.none{color:var(--muted);font-size:12.5px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between}
+label.sw{display:inline-flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.hollow{display:inline-block;width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--muted)}
+.bx{width:18px;height:12px;border-radius:3px;border:1.5px solid var(--unit-bd)} .bx.part{border-style:dashed;border-width:2px}
+
+.wrap{position:relative}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+svg{display:block;width:100%;min-width:1560px;height:auto;font-family:var(--font)}
+.colhead{font-size:11px;fill:var(--muted);letter-spacing:.12em}
+.colrule{stroke:var(--line);stroke-width:1}
+.edge{fill:none;stroke:var(--edge);stroke-width:1.2;marker-end:url(#arr);transition:opacity .12s}
+.edge.in{stroke:var(--in);stroke-width:2.2;marker-end:url(#arrIn)}
+.edge.out{stroke:var(--out);stroke-width:2.2;marker-end:url(#arrOut)}
+#arr path{fill:var(--edge)} #arrIn path{fill:var(--in)} #arrOut path{fill:var(--out)}
+.node{cursor:pointer;transition:opacity .12s}
+.node rect{stroke-width:1.3}
+.node .nm{font-size:13px;font-weight:700;text-anchor:middle;fill:var(--ink)}
+.node.feed rect{fill:var(--feed);stroke:var(--feed)} .node.feed .nm{fill:var(--feed-ink)}
+.node.unit rect{fill:var(--unit);stroke:var(--unit-bd)}
+.node.stream rect{fill:var(--stream);stroke:var(--stream-bd)}
+.node.chem rect{fill:var(--chem);stroke:var(--chem-bd)}
+.node.prod rect{fill:var(--prod);stroke:var(--prod-bd)}
+.node.fuel rect{fill:var(--fuel);stroke:var(--fuel-bd)}
+.node.part rect{stroke-width:2.4;stroke-dasharray:6 3}
+.node .pd{stroke-width:1.5}
+.node .pd.off{fill:var(--surface)}
+.node.feed .pd{stroke:var(--feed-ink)!important}
+svg.onlydiff .node:not(.part){opacity:.22}
+svg.onlydiff .edge{opacity:.25}
+svg.focus .node:not(.on){opacity:.25}
+svg.focus .edge:not(.in):not(.out){opacity:.1}
+svg.focus .node.on{opacity:1}
+
+.tip{position:absolute;z-index:5;width:320px;max-width:calc(100% - 16px);background:var(--surface);color:var(--ink);
+  border:1px solid var(--unit-bd);border-radius:6px;padding:12px 14px;font-size:13px;pointer-events:auto;
+  box-shadow:0 6px 22px rgba(10,20,30,.22);display:flex;flex-direction:column;gap:7px}
+.tip h3{margin:0;font-size:15px;font-weight:700}
+.tip h3 span{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
+.tip p{margin:0;color:var(--muted);font-size:12.5px}
+.tip ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:7px}
+.tip li{display:grid;grid-template-columns:10px 1fr;gap:8px;align-items:baseline;font-size:12.5px}
+.tip li .dot{transform:translateY(1px)}
+.tip li.no{color:var(--muted)} .tip li.no .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted)}
+.tip li b{font-weight:700}
+
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{position:sticky;top:0;background:var(--surface);font-size:13px;white-space:nowrap}
+thead th .dot{margin-right:6px}
+tbody th{font-weight:500;white-space:nowrap}
+tr.grp th{background:var(--soft);font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+tr.df{background:var(--diff)}
+td.n{color:var(--muted)}
+td .yp{display:inline-block;margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--in);font-variant-numeric:tabular-nums}
+td .yp.top{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+td .c{font-family:var(--mono);font-size:12px}
+td .x{display:block;font-size:11.5px;color:var(--muted);max-width:26em}
+table.meta td{min-width:14em}
+.foot{font-size:12px;color:var(--muted);max-width:75em;margin:0}
+@media (prefers-reduced-motion:reduce){.edge,.node{transition:none}}
+.by{font-size:12px;font-weight:300;color:var(--muted);opacity:.75;margin-left:10px;letter-spacing:.03em;vertical-align:middle}
+</style>
+
+<div class="page">
+  <header>
+    <h1>五大煉化對比<span class="by">@Harry汪</span></h1>
+    <p class="lede">勾選要比較的煉廠（至少兩家），下面的規模、主要區別、流程圖和對照表會跟著更新。</p>
+  </header>
+
+  <div class="picker" id="picker" role="group" aria-label="選擇要比較的煉廠"></div>
+
+  <section class="card">
+    <h2>規模與出率<small>條形長度按五家中的最大值比例</small></h2>
+    <div class="metrics" id="metrics"></div>
+    <p class="note" id="mnote"></p>
+  </section>
+
+  <section class="card">
+    <h2>主要區別<small>按所選煉廠自動比對</small></h2>
+    <div class="diffs" id="diffs"></div>
+    <p class="note" id="partial"></p>
+  </section>
+
+  <section class="card">
+    <div class="toolbar">
+      <h2>流程對照<small>方塊下的圓點代表所選各廠，實心＝有，空心＝沒有</small></h2>
+      <label class="sw"><input type="checkbox" id="onlyDiffMap"> 只突出有差異的</label>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="wrap" id="wrap">
+      <div class="scroll" id="scroll"><svg id="svg" role="img" aria-label="所選煉廠的流程對照圖"></svg></div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="toolbar">
+      <h2>逐項對照<small>數字為萬噸/年，藍字為出率（產量÷原油加工量），加底線的是該行最高；底色標出有的廠有、有的廠沒有（或工藝不同）的項目</small></h2>
+      <label class="sw"><input type="checkbox" id="onlyDiffTab"> 只看有差異的</label>
+    </div>
+    <div class="tscroll"><table id="matrix"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>背景</h2>
+    <div class="tscroll"><table class="meta" id="meta"></table></div>
+  </section>
+
+  <p class="foot">出率＝設計產能÷原油加工能力，屬於設計口徑，實際運轉會隨原油、負荷和檢修變化；加工裝置標的是處理量佔原油的比例，不是出率。規模數字取自環評批復、公司公告和產業報導，個別裝置後來有擴能或方案調整，標「待核實」的項目未找到一致來源。空白或「✓」表示有該裝置但未查到可靠規模；盛虹含斯爾邦、虹威、虹港等關聯公司的裝置，浙石化的PTA和PET在廠外。<br>By Harry汪</p>
+</div>
+
+<script>
+const COLS=['原料','蒸餾','直餾餾分','二次加工','重整·裂解｜成品油','烯烴·芳烴','中間體','衍生物·聚合物','下游材料'];
+const LIB={
+ ext:{c:0,r:1,t:'feed',n:'外購輕烴',e:'Ethane / LPG / MeOH',d:'從廠外買進的乙烷、丙烷、甲醇等輕質原料。',u:'補充乙烯裂解、丙烷脫氫或甲醇制烯烴的進料，降低對石腦油的依賴。'},
+ crude:{c:0,r:6,t:'feed',n:'原油',e:'Crude oil',d:'全廠起點。民營大煉化以進口中東中質、重質含硫原油為主。',u:'經蒸餾切成不同沸點的餾分，再分頭加工。'},
+ coal:{c:0,r:13,t:'feed',n:'煤·石油焦',e:'Coal / petcoke',d:'氣化原料，不進煉油主流程。',u:'氣化後製氫氣和合成氣；全加氫型煉廠耗氫量很大，煤制氫比天然氣便宜。'},
+ cdu:{c:1,r:6,t:'unit',n:'常壓蒸餾',e:'CDU',d:'原油加熱到約360°C，在常壓塔內按沸點切割，不發生化學反應。',u:'塔頂出輕烴和石腦油，側線出煤油、柴油，塔底的常壓渣油去減壓塔。'},
+ vdu:{c:1,r:10,t:'unit',n:'減壓蒸餾',e:'VDU',d:'在真空下繼續蒸餾常壓渣油，避免高溫裂解結焦。',u:'拔出減壓蠟油（VGO），塔底剩下最重的減壓渣油。'},
+ lpg:{c:2,r:1,t:'stream',n:'輕烴·液化氣',e:'C1–C4',d:'乾氣和液化氣，主要是C1到C4。',u:'脫硫後分離：乙烷、丙烷、丁烷是優質裂解料，丙烯和C4各有化工用途。'},
+ naph:{c:2,r:4,t:'stream',n:'石腦油',e:'Naphtha · <180–220°C',d:'約220°C以前的輕餾分。',u:'重石腦油去重整產芳烴，輕石腦油去乙烯裂解。兩頭都搶，是煉化一體化最關鍵的中間料。'},
+ dist:{c:2,r:6,t:'stream',n:'煤柴油餾分',e:'Kero / diesel · 180–360°C',d:'中間餾分油。',u:'加氫精製成航煤、柴油；化工型煉廠把大部分送去加氫裂化，轉成石腦油。'},
+ vgo:{c:2,r:9,t:'stream',n:'蠟油 VGO',e:'VGO · 360–540°C',d:'減壓塔側線抽出的重餾分。',u:'加氫裂化或催化裂化的主要進料，是轉化成輕質油和化工料的主力。'},
+ vr:{c:2,r:11,t:'stream',n:'減壓渣油',e:'Vacuum residue · >540°C',d:'原油中最重的部分，富含硫、金屬和瀝青質。',u:'怎麼處理渣油決定了全廠路線：加氫（多產輕油、少產焦）或焦化（投資低、產石油焦）。'},
+ gas:{c:3,r:1,t:'unit',n:'輕烴回收·氣分',e:'Gas plant',d:'收集各裝置的氣體，脫硫後按碳數分離成C2、C3、C4。',u:'丙烯直接去下游，丙烷去脫氫，飽和輕烴去乙烯裂解，C4去MTBE和烷基化。'},
+ nht:{c:3,r:4,t:'unit',n:'石腦油加氫',e:'NHT',d:'加氫脫除硫、氮，保護重整催化劑。',u:'精製後的重石腦油進連續重整。'},
+ dhc:{c:3,r:6,t:'unit',n:'柴油加氫裂化',e:'Diesel hydrocracker',d:'高壓加氫，把柴油餾分裂化成更輕的組分。',u:'產重石腦油（去重整）、航煤和少量清潔柴油。這是「少產柴油、多產芳烴」的關鍵裝置。'},
+ vhc:{c:3,r:8,t:'unit',n:'蠟油加氫裂化',e:'VGO hydrocracker',d:'蠟油在高壓氫氣下裂化，產品硫含量極低。',u:'重石腦油去重整，航煤外售，加氫尾油是優質乙烯裂解料。'},
+ fcc:{c:3,r:9,t:'unit',n:'催化裂化',e:'FCC / DCC',d:'重油在催化劑上裂化，不耗氫。催化裂解（DCC）是多產丙烯的版本。',u:'產汽油組分、液化氣（富含丙烯）和柴油；油漿去焦化或作燃料。'},
+ sda:{c:3,r:10,t:'unit',n:'溶劑脫瀝青',e:'SDA',d:'用丙烷、丁烷等溶劑把渣油裡的瀝青質萃取分離出來。',u:'脫瀝青油回加氫裂化，脫油瀝青作氣化原料或燃料。',g:1},
+ rhc:{c:3,r:11,t:'unit',n:'渣油加氫',e:'Resid hydro',d:'渣油加氫脫硫、脫金屬並部分裂化。固定床轉化率低，沸騰床、漿態床轉化率高。',u:'產出加氫重油（去催化裂化）、蠟油和石腦油；脫下的硫回收成硫磺。'},
+ coker:{c:3,r:12,t:'unit',n:'延遲焦化',e:'Delayed coker',d:'渣油高溫熱裂化，把碳以石油焦形式脫掉。',u:'產焦化汽柴油、焦化蠟油（都要再加氫）和石油焦。'},
+ h2:{c:3,r:13,t:'unit',n:'制氫',e:'H₂ plant',d:'煤或石油焦氣化、變換、提純得到氫氣。',u:'供全廠加氫裝置；重整副產氫不夠用時由它補足。'},
+ pdh:{c:4,r:0,t:'unit',n:'丙烷脫氫',e:'PDH',d:'丙烷在催化劑上脫掉一分子氫變成丙烯。',u:'專產丙烯，副產氫氣。'},
+ cracker:{c:4,r:2,t:'unit',n:'乙烯裂解',e:'Steam cracker',d:'輕烴、石腦油、加氫尾油在800°C以上與蒸汽一起裂解。',u:'產乙烯、丙烯、混合C4（含丁二烯）和裂解汽油（富含苯）。'},
+ mto:{c:4,r:3,t:'unit',n:'甲醇制烯烴',e:'MTO',d:'甲醇在分子篩催化劑上轉化成乙烯和丙烯。',u:'不靠原油的烯烴來源。'},
+ ccr:{c:4,r:4,t:'unit',n:'連續重整',e:'CCR reformer',d:'把重石腦油中的環烷烴、鏈烷烴轉成芳烴，催化劑連續再生。',u:'重整生成油去芳烴聯合裝置；副產大量氫氣，是全廠最便宜的氫源。'},
+ gasoline:{c:4,r:6,t:'fuel',n:'汽油',e:'Gasoline',d:'由催化汽油、重整汽油、烷基化油、MTBE等調和而成。',u:'車用燃料。'},
+ jet:{c:4,r:7,t:'fuel',n:'航空煤油',e:'Jet fuel',d:'加氫裂化和煤油加氫的產品。',u:'航空燃料，成品油中需求增長較好的一種。'},
+ diesel:{c:4,r:8,t:'fuel',n:'柴油',e:'Diesel',d:'加氫後的清潔柴油。',u:'車用、船用燃料。化工型煉廠盡量壓低柴油產量。'},
+ coke:{c:4,r:12,t:'fuel',n:'石油焦',e:'Petcoke',d:'焦化裝置的固體副產。',u:'低硫焦做預焙陽極、負極材料；高硫焦作燃料或氣化制氫。'},
+ sulfur:{c:4,r:13,t:'fuel',n:'硫磺',e:'Sulfur',d:'各加氫裝置脫下的硫化氫經克勞斯法回收。',u:'製硫酸、化肥。加工高硫原油的煉廠產量很大。'},
+ propylene:{c:5,r:1,t:'chem',n:'丙烯',e:'C₃H₆',d:'來自乙烯裂解、催化裂化氣分和丙烷脫氫。',u:'聚丙烯、丙烯腈、環氧丙烷、苯酚丙酮的原料。'},
+ ethylene:{c:5,r:3,t:'chem',n:'乙烯',e:'C₂H₄',d:'石化工業最基礎的原料。',u:'聚乙烯、EVA、乙二醇、苯乙烯的原料。'},
+ c4:{c:5,r:5,t:'chem',n:'混合C4·丁二烯',e:'C4 / butadiene',d:'裂解和催化的C4餾分，先抽提丁二烯。',u:'丁二烯做合成橡膠和ABS；剩下的異丁烯做MTBE，其餘去烷基化。'},
+ aro:{c:5,r:7,t:'unit',n:'芳烴聯合',e:'Aromatics complex',d:'抽提、歧化、異構化、吸附分離一整套，把混合芳烴盡量轉成對二甲苯。',u:'主產PX，副產苯。'},
+ acn:{c:6,r:0,t:'chem',n:'丙烯腈',e:'Acrylonitrile',d:'丙烯氨氧化制得，副產氫氰酸和乙腈。',u:'腈綸、ABS、碳纖維原絲；副產氫氰酸可做MMA。'},
+ po:{c:6,r:2,t:'chem',n:'環氧丙烷',e:'PO',d:'丙烯氧化制得，常與苯乙烯聯產（PO/SM法）。',u:'聚醚多元醇，做聚氨酯泡棉。'},
+ eoeg:{c:6,r:4,t:'chem',n:'環氧乙烷·乙二醇',e:'EO / EG',d:'乙烯氧化成環氧乙烷，再水合成乙二醇。',u:'乙二醇和PTA一起聚合成PET；環氧乙烷做表面活性劑、減水劑。'},
+ mtbe:{c:6,r:5,t:'chem',n:'MTBE',e:'MTBE',d:'C4中的異丁烯與甲醇醚化，醚化前後的C4分別叫醚前、醚後C4。',u:'高辛烷值汽油組分；MTBE裂解可得高純異丁烯做MMA；醚後C4去烷基化。'},
+ benzene:{c:6,r:7,t:'chem',n:'苯',e:'Benzene',d:'來自芳烴聯合裝置和裂解汽油。',u:'苯乙烯、苯酚、己內酰胺的原料。'},
+ px:{c:6,r:10,t:'chem',n:'對二甲苯 PX',e:'Paraxylene',d:'芳烴聯合裝置的主產品，民營大煉化的建廠初衷。',u:'幾乎全部用來生產PTA。'},
+ mma:{c:7,r:0,t:'prod',n:'MMA',e:'Methyl methacrylate',d:'可由異丁烯氧化，或由丙酮和氫氰酸（ACH法）制得。',u:'聚合成PMMA（壓克力），用於導光板、車燈、塗料。'},
+ pp:{c:7,r:1,t:'prod',n:'聚丙烯 PP',e:'Polypropylene',d:'丙烯聚合。',u:'注塑件、薄膜、纖維、汽車和家電部件。'},
+ eva:{c:7,r:2,t:'prod',n:'EVA',e:'EVA',d:'乙烯和醋酸乙烯高壓共聚。',u:'光伏組件封裝膠膜、電纜料、發泡鞋材。'},
+ pe:{c:7,r:3,t:'prod',n:'聚乙烯 PE',e:'HDPE / LLDPE / LDPE',d:'乙烯聚合。全密度裝置可在HDPE和LLDPE之間切換，LDPE用高壓法。',u:'薄膜、管材、中空容器、電纜料。'},
+ alky:{c:7,r:5,t:'fuel',n:'烷基化油',e:'Alkylate',d:'醚後C4中的異丁烷和丁烯在酸催化下合成。',u:'無硫、無芳烴、無烯烴的高辛烷值汽油調和組分，回到汽油池。'},
+ sm:{c:7,r:6,t:'chem',n:'苯乙烯',e:'Styrene',d:'苯和乙烯先合成乙苯，再脫氫。',u:'聚苯乙烯、ABS、丁苯橡膠。'},
+ phenol:{c:7,r:8,t:'chem',n:'苯酚丙酮',e:'Phenol / acetone',d:'苯和丙烯合成異丙苯，氧化後得到苯酚和丙酮。',u:'兩者合成雙酚A，再做聚碳酸酯和環氧樹脂；丙酮還可做MMA。'},
+ pta:{c:7,r:10,t:'chem',n:'PTA',e:'Purified terephthalic acid',d:'PX在醋酸溶劑中用空氣氧化，再加氫精製。',u:'聚酯（PET、PBT、PBAT）的主要原料。'},
+ abs:{c:8,r:6,t:'prod',n:'ABS',e:'ABS resin',d:'丙烯腈、丁二烯、苯乙烯三元共聚。',u:'家電外殼、汽車內飾、電子產品。'},
+ pc:{c:8,r:8,t:'prod',n:'聚碳酸酯 PC',e:'Polycarbonate',d:'雙酚A與碳酸二苯酯（或光氣）聚合。',u:'透明工程塑膠：車燈、板材、電子外殼。'},
+ pet:{c:8,r:10,t:'prod',n:'PET 聚酯',e:'PET',d:'PTA和乙二醇縮聚，先得到聚酯切片。',u:'切片紡成滌綸長絲、短纖，或做瓶片、薄膜。'},
+ pbt:{c:8,r:11,t:'prod',n:'PBT·PBAT',e:'PBT / PBAT',d:'PTA與丁二醇縮聚得PBT；再加入己二酸共聚得PBAT。',u:'PBT是工程塑膠（連接器、汽車部件）；PBAT是可降解塑膠（購物袋、地膜）。'}
+};
+
+/* ---------- 物流：兩端都存在時才畫 ---------- */
+const EDGES=[
+ ['crude','cdu','原油'],['cdu','lpg','塔頂氣'],['cdu','naph','直餾石腦油'],['cdu','dist','煤柴油側線'],['cdu','vdu','常壓渣油'],
+ ['vdu','vgo','減壓蠟油'],['vdu','vr','減壓渣油'],
+ ['lpg','gas','液化氣'],['naph','nht','重石腦油'],['naph','cracker','輕石腦油'],['dist','dhc','直餾柴油'],
+ ['vgo','vhc','蠟油'],['vgo','fcc','蠟油'],['vr','rhc','渣油'],['vr','coker','渣油'],
+ ['rhc','fcc','加氫重油'],['rhc','vhc','加氫蠟油'],['rhc','sda','未轉化油'],['sda','vhc','脫瀝青油'],
+ ['coker','vhc','焦化蠟油'],['coker','coke','石油焦'],['rhc','sulfur','酸性氣回收'],
+ ['coal','h2','氣化原料'],['h2','rhc','氫氣'],
+ ['ext','cracker','乙烷·丙烷'],['ext','pdh','丙烷'],['ext','mto','甲醇'],
+ ['gas','cracker','飽和輕烴'],['gas','pdh','丙烷'],['gas','propylene','氣分丙烯'],['gas','c4','醚前C4'],
+ ['nht','ccr','精製石腦油'],['dhc','ccr','重石腦油'],['vhc','ccr','重石腦油'],
+ ['dhc','jet','航煤'],['dhc','diesel','柴油'],['vhc','jet','航煤'],['vhc','cracker','加氫尾油'],
+ ['fcc','gasoline','催化汽油'],['fcc','diesel','催化柴油'],['fcc','gas','富丙烯液化氣'],
+ ['ccr','aro','重整生成油'],['ccr','gasoline','重整汽油'],
+ ['cracker','ethylene','乙烯'],['cracker','propylene','丙烯'],['cracker','c4','混合C4'],['cracker','aro','裂解汽油'],
+ ['pdh','propylene','丙烯'],['mto','ethylene','乙烯'],['mto','propylene','丙烯'],
+ ['aro','benzene','苯'],['aro','px','PX'],
+ ['propylene','pp','丙烯'],['propylene','acn','丙烯'],['propylene','po','丙烯'],['propylene','phenol','丙烯'],
+ ['ethylene','pe','乙烯'],['ethylene','eva','乙烯'],['ethylene','eoeg','乙烯'],['ethylene','sm','乙烯'],
+ ['c4','mtbe','異丁烯'],['mtbe','alky','醚後C4'],['mtbe','mma','高純異丁烯'],
+ ['acn','mma','副產氫氰酸'],['acn','abs','丙烯腈'],
+ ['benzene','sm','苯'],['benzene','phenol','苯'],['sm','abs','苯乙烯'],['phenol','pc','雙酚A'],
+ ['px','pta','PX'],['pta','pet','PTA'],['pta','pbt','PTA']
+];
+
+/* ---------- 五家廠：n[id]=[方塊小字, 本廠說明] ---------- */
+const PLANTS=[
+{id:'zpc',tab:'榮盛·浙石化',cap:'4000',name:'浙江石化',full:'榮盛石化控股 · 浙江舟山魚山島',
+ kpi:[['原油加工','4000'],['對二甲苯','880'],['乙烯','420']],
+ meta:[['股東','榮盛石化51%、桐昆20%、巨化20%、舟山海投9%'],['投產','一期2019年，二期2022年全面投產'],
+       ['重油路線','固定床渣油加氫＋重油催化裂化＋延遲焦化，二期起加上漿態床渣油加氫裂化；加氫和脫碳兩條腿走路'],
+       ['看點','全球單廠規模最大的煉化一體化基地之一。PX不在島上做PTA，而是供給榮盛系的逸盛石化']],
+ n:{crude:['4000',''],coal:['','煤和自產石油焦一起氣化，供氫氣和合成氣。'],cdu:['4×1000','兩期各兩套1000萬噸常減壓。'],vdu:'',lpg:'',naph:'',dist:'',vgo:'',vr:'',
+  gas:'',nht:'',dhc:'',vhc:'',fcc:['420','重油催化裂化，一期配置。'],rhc:['固定床＋漿態床','一期500萬噸固定床渣油加氫脫硫；二期及後續改造新增漿態床渣油加氫裂化。'],
+  coker:['300','一期配置。'],h2:['煤焦制氫',''],pdh:['60',''],cracker:['3×140','三套裂解合計420萬噸乙烯。'],ccr:'',
+  gasoline:['','成品油收率不到四成，其餘都是化工品。'],jet:'',diesel:'',coke:['','部分自用於氣化制氫。'],sulfur:'',
+  propylene:'',ethylene:'',c4:'',aro:['PX 880','全球最大的PX生產基地之一。'],acn:'',po:['','與苯乙烯聯產（待核實規模）。'],eoeg:'',mtbe:'',benzene:'',px:['880',''],
+  mma:'',pp:['2×90',''],eva:['30',''],pe:['',''],alky:'',sm:'',phenol:'',pta:['廠外·逸盛','PX主要供應榮盛參股的逸盛石化（寧波、大連、海南）的PTA裝置，不在魚山島內。'],
+  pc:['52',''],abs:['40','新增140萬噸乙烯計畫配套。'],pet:['廠外','榮盛、恆逸、桐昆等股東方的聚酯工廠。']}},
+{id:'hengli',tab:'恆力',cap:'2000',name:'恆力煉化',full:'恆力石化 · 遼寧大連長興島',
+ kpi:[['原油加工','2000'],['對二甲苯','450'],['乙烯','150']],
+ meta:[['股東','恆力石化（恆力集團）全資'],['投產','煉化2019年，乙烯2020年'],
+       ['重油路線','沸騰床渣油加氫裂化＋溶劑脫瀝青。不建催化裂化，也不建焦化，全加氫流程'],
+       ['看點','一切為PX服務：柴油、蠟油、渣油都加氫裂化成重石腦油去重整。耗氫巨大，所以配了煤制氫。PX廠內直接做成PTA和聚酯']],
+ n:{crude:['2000',''],coal:['500','年加工煤炭約500萬噸，同時聯產甲醇、醋酸。'],cdu:['2×1000',''],vdu:'',lpg:'',naph:'',dist:'',vgo:'',vr:'',
+  gas:'',nht:'',dhc:'',vhc:'',sda:['','處理沸騰床的未轉化油。'],rhc:['沸騰床 2×320','沸騰床加氫裂化，渣油轉化率遠高於固定床。'],h2:['煤制氫',''],
+  pdh:['130','C3/iC4混合脫氫（待核實）。'],cracker:['150','進料以煉廠乾氣、乙烷、液化氣和加氫尾油為主，石腦油用量少。'],ccr:['3×320','重整能力960萬噸，是PX產量的基礎。'],
+  gasoline:'',jet:'',diesel:['','產量被壓到很低。'],sulfur:'',
+  propylene:'',ethylene:'',c4:'',aro:['PX 450','設計450萬噸，實際產能已超過設計值。'],eoeg:['180',''],mtbe:'',benzene:'',px:['450',''],
+  pp:['80–85',''],pe:['HDPE 40',''],alky:'',sm:['72',''],pta:['廠內 1200','長興島PTA約1200萬噸，另有惠州基地；PX管道直供。'],
+  pet:['','集團內聚酯切片、滌綸長絲、瓶片、薄膜。'],pbt:['康輝新材料','恆力旗下康輝的PBT、PBAT。']}},
+{id:'shenghong',tab:'盛虹',cap:'1600',name:'盛虹煉化',full:'東方盛虹 · 江蘇連雲港徐圩',
+ kpi:[['原油加工','1600'],['對二甲苯','280'],['乙烯','110']],
+ meta:[['股東','東方盛虹全資'],['投產','2022年全流程打通'],
+       ['重油路線','沸騰床渣油加氫＋延遲焦化（焦化規模待核實），不建催化裂化'],
+       ['看點','單系列1600萬噸常減壓為國內單套最大。原油、甲醇、丙烷三條原料路線並行：煉化之外，斯爾邦用甲醇制烯烴和丙烷脫氫做丙烯腈、EVA、MMA']],
+ label:{ext:'外購甲醇·丙烷'},
+ n:{crude:['1600',''],ext:['斯爾邦','斯爾邦石化外購甲醇和丙烷，不依賴原油。'],cdu:['1×1600','國內單套規模最大的常減壓。'],vdu:'',lpg:'',naph:'',dist:'',vgo:'',vr:'',
+  gas:'',nht:'',dhc:['360',''],vhc:['350',''],rhc:['沸騰床 330',''],coker:['','規模待核實。'],h2:'',
+  pdh:['斯爾邦 70',''],mto:['斯爾邦','斯爾邦的甲醇制烯烴裝置。'],cracker:['110',''],ccr:['3×310',''],
+  gasoline:'',jet:'',diesel:'',coke:'',sulfur:'',
+  propylene:'',ethylene:'',c4:'',aro:['PX 280',''],acn:['斯爾邦 104','國內最大的丙烯腈生產商。'],po:['虹威化工','PO/SM聯產。'],eoeg:'',mtbe:'',benzene:'',px:['280',''],
+  mma:['斯爾邦','用丙烯腈副產的氫氰酸，走ACH法。'],pp:'',eva:['斯爾邦','光伏級EVA的國內主要供應商。'],alky:'',sm:['虹威化工',''],phenol:['','2021年方案調整後新建。'],
+  pta:['虹港石化','同在連雲港，PX就近供應。'],pet:['國望高科','滌綸長絲，盛虹的起家業務。']}},
+{id:'yulong',tab:'裕龍',cap:'2000',name:'裕龍石化',full:'山東龍口裕龍島',
+ kpi:[['原油加工','2000'],['混合芳烴','300'],['乙烯','300']],
+ meta:[['股東','南山集團主導，山東能源集團等參股'],['投產','2024年首套常減壓開車，其後陸續投產'],
+       ['重油路線','渣油加氫（3×260，含漿態床）＋催化裂解（DCC），不建焦化'],
+       ['看點','山東整合地煉產能換來的計畫。乙烯300萬噸，烯烴比重是五家中最高的；芳烴只做到混二甲苯，一期沒有PX和PTA']],
+ label:{fcc:'催化裂解 DCC',aro:'芳烴抽提',px:'混二甲苯'},
+ n:{crude:['2000',''],cdu:['2×1000','一套常壓、一套常減壓。'],vdu:'',lpg:'',naph:'',dist:'',vgo:'',vr:'',
+  gas:'',nht:['260',''],dhc:['360',''],vhc:['200',''],fcc:['400','催化裂解比普通催化裂化多產丙烯。'],rhc:['3×260','三套渣油加氫，其中含漿態床裝置。'],h2:'',
+  cracker:['2×150','兩套150萬噸裂解。'],ccr:['2×260',''],
+  gasoline:'',jet:'',diesel:'',sulfur:'',
+  propylene:'',ethylene:'',c4:['丁二烯 20',''],aro:['混合芳烴 300','只抽提，不建完整的PX聯合裝置。'],acn:'',po:'',eoeg:'',benzene:'',
+  px:['300','一期未建PX，混二甲苯外售給PX、PTA工廠。'],
+  pp:['4×40＋30','環評口徑。'],eva:['EVA/LDPE',''],pe:['','HDPE、LLDPE，另有超高分子量聚乙烯。'],sm:'',abs:''}},
+{id:'huajin',tab:'華錦阿美',cap:'1500',name:'華錦阿美',full:'遼寧盤錦遼濱 · 精細化工及原料工程',
+ kpi:[['原油加工','1500'],['對二甲苯','200'],['乙烯','165']],
+ meta:[['股東','北方華錦51%、沙特阿美30%、盤錦鑫誠19%'],
+       ['進度','2025年12月32套主裝置機械竣工，2026年9月首船原油到港，目前在試開車，官方未公布投產日期'],
+       ['重油路線','渣油加氫500＋高丙烯催化裂化420＋延遲焦化160'],
+       ['看點','五家中唯一有國際石油公司入股的。阿美鎖定原油供應（最多約21萬桶/日），總投資837億元']],
+ label:{fcc:'高丙烯催化裂化'},
+ n:{crude:['1500','沙特阿美供應大部分原油。'],cdu:['1500',''],vdu:'',lpg:'',naph:'',dist:'',vgo:'',vr:'',
+  gas:['350',''],nht:'',dhc:['370','另有160萬噸煤柴油加氫。'],vhc:['250',''],fcc:['420',''],rhc:['500',''],coker:['160',''],
+  cracker:['165',''],ccr:'',gasoline:'',jet:'',diesel:'',coke:'',sulfur:'',
+  propylene:'',ethylene:'',c4:'',aro:['PX 200',''],eoeg:['59',''],benzene:'',px:['200','廠內沒有PTA，PX外售。'],
+  pp:['2×50',''],pe:['2×45＋20','兩套45萬噸全密度聚乙烯，一套20萬噸HDPE。'],sm:['70','乙苯/苯乙烯73.6/70萬噸。']}}
+];
+
+/* ---------- 出率：q[id]=[萬噸/年, 說明, 不計出率] ；出率＝產量÷原油加工量 ---------- */
+const FEED=new Set(['cdu','gas','nht','dhc','vhc','fcc','rhc','sda','coker','ccr']);
+const YIELD={
+ zpc:{oil:{lo:32,hi:32,t:'約32%',note:'一期設計35%、二期29%，兩期合計約1280萬噸。'},
+  q:{cdu:[4000],rhc:[500,'一期固定床渣油加氫；漿態床規模未計入。'],fcc:[420,'一期。'],coker:[300,'一期。'],pdh:[60],
+   cracker:[420,'三套裂解的乙烯產能。'],ethylene:[420],aro:[880,'PX產能。'],px:[880],benzene:[283,'一期152＋二期131。'],
+   jet:[574,'一期284＋二期290。'],gasoline:[null,'一期汽油277萬噸，佔一期原油的13.9%；二期汽油未查到，全廠出率暫不計算。汽柴油兩期合計約706萬噸（17.7%），由成品油收率減去航煤推算。'],
+   diesel:[null,'柴油產量未查到。汽柴油兩期合計約706萬噸（17.7%），由成品油收率減去航煤推算。'],
+   pp:[180,'一期90＋二期90。按裝置產能計；丙烯還來自丙烷脫氫，並分給環氧丙烷、丙烯腈等，實際出率以排產為準。'],pe:[195,'一期HDPE 30＋LLDPE 45；二期HDPE 35＋LLDPE 45＋LDPE 40。'],eva:[30],pc:[52],
+   eoeg:[80],sm:[120,'苯乙烯60＋PO/SM聯產60。'],po:[27],abs:[40]}},
+ hengli:{oil:{lo:40,hi:50,t:'40–50%',note:'恆力沒有固定的產品結構，按市場每天調整汽油、航煤、柴油和化工料的分配，所以公開口徑從15%到53%都有：設計產品表約50%，新華社2025年報導約20%。粗略比較取40%–50%。'},
+  q:{cdu:[2000],rhc:[640],ccr:[960],pdh:[130,'待核實。'],cracker:[150,'乙烯產能。裂解裝置設計乙烯收率48%、雙烯（乙烯＋丙烯）收率60%，均以裂解原料計。'],ethylene:[150],aro:[434,'設計PX產量。'],px:[434],benzene:[97],
+   naph:[163,'化工輕油，送乙烯裂解。'],gasoline:[461,'設計產品表；實際隨每日排產變動。'],jet:[371,'設計產品表；實際隨每日排產變動。'],diesel:[161,'設計產品表；實際隨每日排產變動。'],eoeg:[180,'2×90。'],pe:[40],sm:[72],pp:[null,'乙烯配套42.26萬噸，加上STPP 20萬噸、JPP 20萬噸等專用料，合計約80–85萬噸。部分丙烯來自混合脫氫裝置，按原油算出率不可靠，暫不計算。'],c4:[14,'丁二烯。'],
+   pta:[1200,'PTA需要的PX超過本廠產量，部分外購，不計出率。',1]}},
+ shenghong:{oil:{lo:31,hi:31,t:'31%',note:'研報產品方案：汽油277.6＋航煤169.7＋柴油48.8＝496萬噸。環評階段約51%，2021年方案調整後降到31%。'},
+  q:{cdu:[1600],dhc:[360],vhc:[350],rhc:[330],ccr:[930],cracker:[110,'乙烯產能。'],ethylene:[110],aro:[280,'PX產能。'],px:[280],
+   gasoline:[277.6],jet:[169.7],diesel:[48.8],eoeg:[190],sm:[45],po:[20],phenol:[40,'苯酚40＋丙酮25。'],
+   eva:[30,'斯爾邦，原料不來自原油，不計出率。',1],mma:[17,'斯爾邦，原料不來自原油，不計出率。',1],pdh:[70,'斯爾邦外購丙烷，不計出率。',1]}},
+ yulong:{oil:{lo:18,hi:40,t:'18–40%',note:'柔性設計，成品油比例可在18%到40%之間調整，沒有單一設計值。'},
+  q:{cdu:[2000],nht:[260],dhc:[360],vhc:[200],fcc:[400],rhc:[780],ccr:[520],cracker:[300,'乙烯產能。'],ethylene:[300],
+   aro:[300,'混合芳烴。'],px:[300,'混二甲苯。'],c4:[20,'丁二烯。'],pp:[190,'環評口徑4×40＋30。'],
+   pe:[90,'全密度50＋HDPE 30＋超高分子量10，不含EVA/LDPE。'],eoeg:[160,'2×80。'],sm:[115,'EB/SM 50＋PO/SM 65。'],po:[30],acn:[26],abs:[60]}},
+ huajin:{oil:{lo:29.7,hi:29.7,t:'約30%',note:'設計成品油收率約29%到30%，年產約446萬噸。'},
+  q:{cdu:[1500],gas:[350],dhc:[370],vhc:[250],fcc:[420],rhc:[500],coker:[160],cracker:[165,'乙烯產能。'],ethylene:[165],
+   aro:[200,'PX產能。'],px:[200],eoeg:[59,'環氧乙烷/乙二醇。'],pp:[100,'2×50。'],pe:[110,'2×45全密度＋20 HDPE。'],sm:[70]}}
+};
+const fmtQ=q=>String(Math.round(q*10)/10);
+function yinfo(p,id){
+  const e=YIELD[p.id]&&YIELD[p.id].q[id];if(!e)return null;
+  const [q,note,no]=e;return{q,note:note||'',no:!!no,feed:FEED.has(id),pct:q!=null&&!no?q/(+p.cap)*100:null};
+}
+function boxSub(p,id){
+  const info=p.n[id];let s=Array.isArray(info)?info[0]:(info||'');const y=yinfo(p,id);
+  if(!y)return s;if(!s&&y.q!=null)s=fmtQ(y.q);
+  return y.pct!=null?(s?s+' · ':'')+y.pct.toFixed(1)+'%':s;
+}
+function yieldLine(p,id){
+  const y=yinfo(p,id);if(!y)return '';
+  let t;
+  if(y.q==null)t='';
+  else if(y.no)t=`${fmtQ(y.q)} 萬噸/年，不計出率。`;
+  else if(y.feed)t=`處理量 ${fmtQ(y.q)} ÷ 原油 ${p.cap} ＝ ${y.pct.toFixed(1)}%（裝置規模佔原油加工量）。`;
+  else t=`出率 ${y.pct.toFixed(1)}%＝${fmtQ(y.q)} ÷ ${p.cap} 萬噸原油（設計產能口徑）。`;
+  return [t,y.no?y.note.replace('不計出率。',''):y.note].filter(Boolean).join(' ');
+}
+
+/* ---------- 狀態 ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+PLANTS.forEach((p,i)=>p.color=`var(--p${i})`);
+let sel=['zpc','hengli'];
+try{const s=JSON.parse(localStorage.getItem('cmp-sel'));if(Array.isArray(s)&&s.length>=2&&s.every(x=>PLANTS.some(p=>p.id===x)))sel=s}catch(e){}
+const S=()=>PLANTS.filter(p=>sel.includes(p.id));
+const has=(p,id)=>id in p.n;
+const sub=(p,id)=>{const v=p.n[id];return Array.isArray(v)?v[0]:(v||'')};
+const note=(p,id)=>{const v=p.n[id];return Array.isArray(v)?v[1]:''};
+const lab=(p,id)=>(p.label&&p.label[id])||LIB[id].n;
+const short=p=>p.tab.replace('榮盛·','');
+
+/* ---------- 選廠 ---------- */
+PLANTS.forEach(p=>{
+  const b=document.createElement('button');b.type='button';b.className='pick';b.id='pick-'+p.id;b.style.setProperty('--c',p.color);
+  b.innerHTML=`<i class="dot"></i>${esc(p.tab)}<small>${p.cap}</small>`;
+  b.addEventListener('click',()=>{
+    if(sel.includes(p.id)){if(sel.length<=2){hint.textContent='至少保留兩家';return}sel=sel.filter(x=>x!==p.id)}else sel.push(p.id);
+    hint.textContent='';try{localStorage.setItem('cmp-sel',JSON.stringify(sel))}catch(e){}
+    render();
+  });
+  $('picker').appendChild(b);
+});
+const hint=document.createElement('span');hint.className='hint';hint.setAttribute('aria-live','polite');$('picker').appendChild(hint);
+
+/* ---------- 規模 ---------- */
+function renderMetrics(ps){
+  const yp=(p,id)=>{const y=yinfo(p,id);return y&&y.pct!=null?y.pct:null};
+  const sumY=ids=>p=>{const v=ids.map(id=>yp(p,id));return v.every(x=>x!=null)?v.reduce((a,b)=>a+b,0):null};
+  const pct=v=>v.toFixed(1)+'%';
+  const defs=[
+    ['原油加工（萬噸/年）',p=>+p.cap,v=>v],
+    ['成品油收率',p=>YIELD[p.id].oil.hi,(v,p)=>YIELD[p.id].oil.t],
+    ['PX 出率',p=>yp(p,'px'),pct],['乙烯 出率',p=>yp(p,'ethylene'),pct],
+    ['聚烯烴（PP＋PE）出率',sumY(['pp','pe']),pct],['乙二醇 出率',p=>yp(p,'eoeg'),pct]];
+  $('metrics').innerHTML=defs.map(([t,f,fmt])=>{
+    const max=Math.max(...PLANTS.map(p=>f(p)||0));
+    return `<div class="metric"><h3>${t}</h3>${ps.map(p=>{const v=f(p),lo=t==='成品油收率'?YIELD[p.id].oil.lo:v;
+      return `<div class="bar" style="--c:${p.color}"><span class="nm">${esc(short(p))}</span><span class="t">${v==null?'':`<span class="f" style="width:${(v/max*100).toFixed(1)}%;display:block;${lo!==v?`background:linear-gradient(90deg,var(--c) ${(lo/v*100).toFixed(0)}%,transparent ${(lo/v*100).toFixed(0)}%);box-shadow:inset 0 0 0 1.5px var(--c)`:''}"></span>`}</span><span class="v">${v==null?'—':fmt(v,p)}</span></div>`}).join('')}</div>`;
+  }).join('');
+  const n=['出率＝設計產能÷原油加工能力。'];
+  if(ps.some(p=>p.id==='yulong'))n.push('裕龍的PX一欄是混合芳烴（混二甲苯），一期沒有建PX；成品油是18%到40%的柔性區間，空心部分為可調範圍。');
+  if(ps.some(p=>p.id==='hengli'))n.push('恆力每天調整產品結構，成品油公開口徑從15%到53%都有，這裡取40%–50%粗比；聚丙烯有部分丙烯來自脫氫，不計出率。');
+  if(ps.some(p=>p.id==='zpc'))n.push('浙石化聚丙烯按兩期裝置產能計，實際分配隨排產變化。');
+  $('mnote').textContent=n.join(' ');
+}
+
+/* ---------- 主要區別 ---------- */
+function renderDiffs(ps){
+  const ids=Object.keys(LIB),n=ps.length;
+  const who=id=>ps.filter(p=>has(p,id));
+  const big=k=>ps.reduce((a,b)=>k(b)>k(a)?b:a);
+  const top={crude:big(p=>+p.kpi[0][1]),eth:big(p=>p.kpi[2][1]/p.kpi[0][1]),px:big(p=>p.id==='yulong'?0:p.kpi[1][1]/p.kpi[0][1])};
+  $('diffs').innerHTML=ps.map(p=>{
+    const only=ids.filter(id=>{const w=who(id);return w.length===1&&w[0]===p});
+    const lack=n>2?ids.filter(id=>{const w=who(id);return w.length===n-1&&!w.includes(p)}):[];
+    const tags=[];
+    if(top.crude===p)tags.push('煉油規模最大');
+    if(top.eth===p)tags.push('乙烯配比最高');
+    if(top.px===p)tags.push('PX配比最高');
+    const chips=(a,c)=>a.length?`<div class="chips">${a.map(id=>`<span class="chip ${c}">${esc(lab(p,id))}</span>`).join('')}</div>`:'<span class="none">沒有</span>';
+    return `<div class="dcard" style="--c:${p.color}"><h3>${esc(p.name)}<span>${esc(tags.join(' · '))}</span></h3>
+      <p><b class="k">重油路線</b>${esc(p.meta[2][1])}</p>
+      <div><b class="k">${n>2?'所選各廠中只有它有':'它有、對方沒有'}</b>${chips(only,'')}</div>
+      ${n>2?`<div><b class="k">所選各廠中只有它沒有</b>${chips(lack,'no')}</div>`:''}</div>`;
+  }).join('');
+  const part=n>3?ids.filter(id=>{const w=who(id).length;return w>1&&w<n-1}):[];
+  $('partial').textContent=part.length?'部分煉廠才有：'+part.map(id=>`${LIB[id].n}（${who(id).map(short).join('、')}）`).join('；')+'。':'';
+}
+
+/* ---------- 流程對照圖 ---------- */
+const NW=128,NH=44,CW=186,RH=56,PADX=18,TOP=40,GAP=CW-NW,NS='http://www.w3.org/2000/svg';
+const svg=$('svg'),tip=$('tip'),wrap=$('wrap');
+const W=PADX*2+CW*COLS.length-GAP,H=TOP+RH*14+10;
+svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+const X=c=>PADX+c*CW,Y=r=>TOP+r*RH+RH/2;
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+let nodesEl={},edgesEl=[],pinned=null;
+function rounded(pts){
+  const p=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);
+  let d=`M${p[0][0]},${p[0][1]}`;
+  for(let i=1;i<p.length-1;i++){
+    const a=p[i-1],b=p[i],c=p[i+1],l1=Math.hypot(b[0]-a[0],b[1]-a[1]),l2=Math.hypot(c[0]-b[0],c[1]-b[1]),r=Math.min(7,l1/2,l2/2);
+    d+=`L${b[0]+(a[0]-b[0])/l1*r},${b[1]+(a[1]-b[1])/l1*r}Q${b[0]},${b[1]} ${b[0]+(c[0]-b[0])/l2*r},${b[1]+(c[1]-b[1])/l2*r}`;
+  }
+  const z=p[p.length-1];return d+`L${z[0]},${z[1]}`;
+}
+function renderMap(ps){
+  pinned=null;hide();svg.innerHTML='';nodesEl={};edgesEl=[];
+  const defs=el('defs',{},svg);
+  for(const id of ['arr','arrIn','arrOut']){const m=el('marker',{id,viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:7,markerHeight:7,orient:'auto',markerUnits:'userSpaceOnUse'},defs);el('path',{d:'M0,0.5L8,4L0,7.5z'},m)}
+  COLS.forEach((t,c)=>{el('text',{x:X(c)+NW/2,y:18,class:'colhead','text-anchor':'middle'},svg).textContent=t});
+  el('line',{x1:PADX,x2:W-PADX,y1:28,y2:28,class:'colrule'},svg);
+  const shown={},occ={};
+  for(const id in LIB)if(ps.some(p=>has(p,id))){shown[id]=1;occ[LIB[id].c+','+LIB[id].r]=1}
+  const lanes=COLS.map(()=>new Map()),lane=(c,k)=>{const m=lanes[c];if(!m.has(k))m.set(k,m.size)};
+  const plan=EDGES.filter(([a,b])=>shown[a]&&shown[b]).map(([a,b,l])=>{
+    const A=LIB[a],B=LIB[b];let mode;
+    if(B.c===A.c){mode='rec';lane(A.c,'s'+a)}
+    else if(B.c===A.c+1){mode='adj';lane(A.c,'s'+a)}
+    else{const free=r=>{for(let c=A.c+1;c<B.c;c++)if(occ[c+','+r])return false;return true};
+      if(free(A.r)){mode='srow';lane(B.c-1,'t'+b)}else if(free(B.r)){mode='trow';lane(A.c,'s'+a)}else{mode='chan';lane(A.c,'s'+a);lane(B.c-1,'t'+b)}}
+    return{a,b,l,mode};
+  });
+  const lx=(c,k)=>{const m=lanes[c],step=Math.min(9,(GAP-22)/Math.max(1,m.size-1));return X(c)+NW+11+m.get(k)*step};
+  const gE=el('g',{},svg),gN=el('g',{},svg);
+  for(const p of plan){
+    const A=LIB[p.a],B=LIB[p.b],x0=X(A.c)+NW,y0=Y(A.r),x3=X(B.c),y3=Y(B.r);let pts;
+    if(p.mode==='rec'){const x=lx(A.c,'s'+p.a),yt=y3+(y3<y0?12:-12);pts=[[x0,y0],[x,y0],[x,yt],[x0+1,yt]]}
+    else if(p.mode==='adj'||p.mode==='trow'){const x=lx(A.c,'s'+p.a);pts=[[x0,y0],[x,y0],[x,y3],[x3,y3]]}
+    else if(p.mode==='srow'){const x=lx(B.c-1,'t'+p.b);pts=[[x0,y0],[x,y0],[x,y3],[x3,y3]]}
+    else{const x1=lx(A.c,'s'+p.a),x2=lx(B.c-1,'t'+p.b),mid=(A.r+B.r)/2,yc=TOP+(Math.round(mid+(A.r<B.r?.01:-.01)-.5)+1)*RH;
+      pts=[[x0,y0],[x1,y0],[x1,yc],[x2,yc],[x2,y3],[x3,y3]]}
+    edgesEl.push({e:el('path',{d:rounded(pts),class:'edge'},gE),a:p.a,b:p.b});
+  }
+  for(const id in shown){
+    const L=LIB[id],w=ps.filter(p=>has(p,id)),part=w.length<ps.length;
+    const g=el('g',{class:`node ${L.t}${part?' part':''}`,tabindex:0,'data-id':id,role:'button','aria-label':L.n,transform:`translate(${X(L.c)},${Y(L.r)-NH/2})`},gN);
+    el('rect',{width:NW,height:NH,rx:L.t==='unit'?3:14},g);
+    el('text',{x:NW/2,y:18,class:'nm'},g).textContent=L.n;
+    ps.forEach((p,i)=>{const c=el('circle',{cx:NW/2+(i-(ps.length-1)/2)*12,cy:NH-11,r:4,class:'pd'+(has(p,id)?'':' off')},g);
+      c.style.stroke=p.color;if(has(p,id))c.style.fill=p.color});
+    nodesEl[id]=g;
+    g.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT);if(pinned)return;if(tip.hidden)show(id);else showT=setTimeout(()=>show(id),150)});g.addEventListener('mouseleave',()=>{clearTimeout(showT);if(!pinned)hideSoon()});
+    g.addEventListener('focus',()=>{if(!pinned)show(id)});g.addEventListener('blur',()=>{if(!pinned)hide()});
+    g.addEventListener('click',ev=>{ev.stopPropagation();if(pinned===id){pinned=null;hide()}else{pinned=id;show(id)}});
+    g.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pinned=null;hide()}});
+  }
+  $('legend').innerHTML=ps.map(p=>`<span style="--c:${p.color}"><i class="dot"></i>${esc(short(p))}</span>`).join('')+
+    '<span><i class="hollow"></i>沒有這套裝置</span><span><i class="bx"></i>所選各廠都有</span><span><i class="bx part"></i>只有部分廠有</span>';
+}
+const capText=s=>s?(/^[\d×＋+ .]+$/.test(s)?s+' 萬噸/年':s):'';
+function show(id){
+  const L=LIB[id],ps=S();
+  svg.classList.add('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');nodesEl[id].classList.add('on');
+  for(const x of edgesEl){x.e.classList.toggle('in',x.b===id);x.e.classList.toggle('out',x.a===id);
+    if(x.b===id)nodesEl[x.a].classList.add('on');if(x.a===id)nodesEl[x.b].classList.add('on')}
+  tip.innerHTML=`<h3>${esc(L.n)}<span>${esc(L.e)}</span></h3><p>${esc(L.d)} ${esc(L.u)}</p><ul>${ps.map(p=>{
+    if(!has(p,id))return `<li class="no"><i class="dot"></i><span><b>${esc(short(p))}</b>：沒有</span></li>`;
+    const alt=lab(p,id)!==L.n?lab(p,id):'',t=[alt,capText(sub(p,id)),note(p,id),yieldLine(p,id)].filter(Boolean).join('。').replace(/。。/g,'。')||'有，規模未查到';
+    return `<li style="--c:${p.color}"><i class="dot"></i><span><b>${esc(short(p))}</b>：${esc(t)}</span></li>`}).join('')}</ul>`;
+  tip.hidden=false;
+  const nr=nodesEl[id].getBoundingClientRect(),wr=wrap.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left=nr.right-wr.left+12;if(left+tw>wr.width-4)left=nr.left-wr.left-tw-12;
+  if(left<4)left=Math.max(4,Math.min(wr.width-tw-4,nr.left-wr.left));
+  let top=nr.top-wr.top-10;if(left<nr.right-wr.left&&left+tw>nr.left-wr.left)top=nr.bottom-wr.top+10;
+  top=Math.max(4,Math.min(top,Math.max(4,wr.height-th-4)));
+  if(!(left<nr.right-wr.left&&left+tw>nr.left-wr.left))top=Math.max(4,Math.min(top,window.innerHeight-wr.top-th-8)); // 放在方塊旁邊時，盡量留在視窗內
+  tip.style.left=left+'px';tip.style.top=top+'px';
+}
+function hide(){tip.hidden=true;svg.classList.remove('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');for(const x of edgesEl)x.e.classList.remove('in','out')}
+document.addEventListener('click',()=>{if(pinned){pinned=null;hide()}});
+/* 從方塊移到詳情框時保留詳情框，離開詳情框後才隱藏 */
+let hideT=null,showT=null;
+function hideSoon(){clearTimeout(hideT);hideT=setTimeout(()=>{if(!pinned)hide()},200)}
+tip.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT)});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideSoon()});
+tip.addEventListener('click',ev=>ev.stopPropagation());
+$('scroll').addEventListener('scroll',()=>{if(pinned)show(pinned)});
+$('onlyDiffMap').addEventListener('change',e=>svg.classList.toggle('onlydiff',e.target.checked));
+
+/* ---------- 對照表 ---------- */
+function renderTable(ps){
+  const only=$('onlyDiffTab').checked,head=`<thead><tr><th></th>${ps.map(p=>`<th style="--c:${p.color}"><i class="dot"></i>${esc(short(p))}</th>`).join('')}</tr></thead>`;
+  let body='';
+  COLS.forEach((t,c)=>{
+    const ids=Object.keys(LIB).filter(id=>LIB[id].c===c&&LIB[id].t!=='stream'&&ps.some(p=>has(p,id))).sort((a,b)=>LIB[a].r-LIB[b].r);
+    const rows=ids.map(id=>{
+      const cells=ps.map(p=>{if(!has(p,id))return null;const y=yinfo(p,id);
+        return [lab(p,id)!==LIB[id].n?lab(p,id):'',sub(p,id)||(y&&y.q!=null?fmtQ(y.q):''),[note(p,id),y?y.note:''].filter(Boolean).join(' '),y&&y.pct!=null?y.pct:null,y&&y.feed]});
+      const pv=cells.map(x=>x&&x[3]).filter(v=>v!=null),top=pv.length>1?Math.max(...pv):null;
+      const sig=cells.map(x=>x?'有|'+x[0]:'—'),df=new Set(sig).size>1;
+      if(only&&!df)return '';
+      return `<tr class="${df?'df':''}"><th scope="row">${esc(LIB[id].n)}</th>${cells.map(x=>x?`<td><span class="c">${esc([x[0],x[1]].filter(Boolean).join(' ')||'✓')}</span>${x[3]!=null?`<span class="yp${x[3]===top?' top':''}">${x[4]?'佔原油 ':'出率 '}${x[3].toFixed(1)}%</span>`:''}${x[2]?`<span class="x">${esc(x[2])}</span>`:''}</td>`:'<td class="n">—</td>').join('')}</tr>`;
+    }).join('');
+    if(rows)body+=`<tr class="grp"><th colspan="${ps.length+1}">${esc(t)}</th></tr>`+rows;
+  });
+  $('matrix').innerHTML=head+`<tbody>${body||`<tr><td colspan="${ps.length+1}" class="n">所選煉廠在這些項目上沒有差異。</td></tr>`}</tbody>`;
+  $('meta').innerHTML=head+'<tbody>'+[['所在地',p=>p.full],['股東',p=>p.meta[0][1]],['投產／進度',p=>p.meta[1][1]],['成品油口徑',p=>YIELD[p.id].oil.note],['看點',p=>p.meta[3][1]]]
+    .map(([t,f])=>`<tr><th scope="row">${t}</th>${ps.map(p=>`<td>${esc(f(p))}</td>`).join('')}</tr>`).join('')+'</tbody>';
+}
+$('onlyDiffTab').addEventListener('change',()=>renderTable(S()));
+
+function render(){
+  const ps=S();
+  PLANTS.forEach(p=>$('pick-'+p.id).setAttribute('aria-pressed',sel.includes(p.id)));
+  renderMetrics(ps);renderDiffs(ps);renderMap(ps);renderTable(ps);
+}
+render();
+</script>

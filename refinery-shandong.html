@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant-TW">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>山東地煉流程圖</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap">
 <style>
 /* 直接打開文件時也要讓 hidden 生效（預覽外殼會自帶這條，獨立文件沒有） */
 [hidden]{display:none!important}
@@ -72,7 +72,7 @@ svg{display:block;width:100%;min-width:1080px;height:auto;font-family:var(--font
 .node.feed .nm{fill:var(--feed-ink)}
 .node.tag .nm{font-size:12px;font-weight:500;fill:var(--heavy)}
 .node .ch{font-size:11px;font-family:var(--mono);text-anchor:middle;fill:var(--muted)}
-.node.feed .ch{fill:var(--feed-ink);opacity:.75}
+.node.feed .ch{fill:var(--feed-ink);opacity:.75;font-size:10px}
 .node.prod .ch{font-weight:500}
 .pool .pn{font-size:13px;font-weight:700;fill:#fff;letter-spacing:.1em;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2px}
 .pool .pv{font-size:11px;font-family:var(--mono);fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2px}
@@ -111,8 +111,19 @@ svg.focus .flab:not(.on){opacity:0}
 .panel ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
 .foot{font-size:12px;color:var(--muted);max-width:75em;margin:0}
 @media (prefers-reduced-motion:reduce){.flow,.node,.flab{transition:none}}
-</style>
 
+/* 語言切換 */
+html[lang="zh-Hans-CN"]{--font:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+html[lang="en-US"]{--font:"Inter","Noto Sans TC",system-ui,sans-serif}
+.langrow{max-width:1320px;margin:0 auto 10px;display:flex;justify-content:flex-end}
+.langsw{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.langsw button{font-family:var(--font);font-size:12px;border:0;background:transparent;color:var(--muted);padding:4px 12px;border-radius:999px;cursor:pointer}
+.langsw button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.langsw button:focus-visible{outline:2px solid var(--muted);outline-offset:2px}
+</style>
+<div class="langrow"><div class="langsw" role="group" aria-label="語言 / 语言 / Language"><button type="button" data-l="zh-TW" lang="zh-Hant">繁中</button><button type="button" data-l="zh-CN" lang="zh-Hans">简中</button><button type="button" data-l="en" lang="en">EN</button></div></div>
+<div id="app"></div>
+<template id="t-zh-TW">
 <div class="page">
   <header>
     <div>
@@ -136,7 +147,7 @@ svg.focus .flab:not(.on){opacity:0}
     <span><i style="background:var(--heavy)"></i>重油（渣油、蠟油、油漿）</span>
     <span><i style="background:var(--gas)"></i>液化氣</span>
     <span><i style="background:var(--coke)"></i>石油焦</span>
-    <span id="lg-up"><i style="background:var(--jet)"></i>航煤 <i style="background:var(--chem);margin-left:8px"></i>化工品</span>
+    <span id="lg-up"><i style="background:var(--jet)"></i>航空煤油 <i style="background:var(--chem);margin-left:8px"></i>化工品</span>
     <span>方塊內：規模（萬噸/年）· 佔原油的典型比例</span>
   </div>
 
@@ -163,18 +174,139 @@ svg.focus .flab:not(.on){opacity:0}
       <li>2024年11月山東地煉產能約1.17億噸/年，佔全省煉能的66%；獨立煉廠從2015年的37家減到2024年的19家。</li>
       <li>2025年平均開工率約52%，明顯低於主營煉廠的72%左右，主要卡在原油進口配額和成品油利潤。</li>
       <li>原油配額不夠時，地煉用不佔配額的燃料油、稀釋瀝青、外購蠟油頂替，所以渣油比例高、焦化規模大、石油焦多。</li>
-      <li>整合與淘汰：裕龍島項目整合10家地煉、退出約2700萬噸產能；200萬噸/年以下的小煉廠按要求在2025年底前淘汰。省內目標是把地煉產能壓到9000萬噸左右，成品油收率降到40%左右。</li>
-      <li>2026年原油非國營貿易進口配額總量持平，新增部分主要給了大型一體化項目，中小地煉配額被削減；成品油出口配額沒有給山東地煉。</li>
+      <li>整合與淘汰：裕龍島計畫整合10家地煉、退出約2700萬噸產能；200萬噸/年以下的小煉廠按要求在2025年底前淘汰。省內目標是把地煉產能壓到9000萬噸左右，成品油收率降到40%左右。</li>
+      <li>2026年原油非國營貿易進口配額總量持平，新增部分主要給了大型一體化計畫，中小地煉配額被削減；成品油出口配額沒有給山東地煉。</li>
     </ul>
   </section>
 
-  <p class="foot">圖中百分比是典型地煉的經驗區間（佔原油加工量），不是某一家企業的實測或設計數據，各廠隨原油品質、重質原料摻煉比例、裝置配置和負荷差別很大。加工裝置標的是處理量佔原油的比例；「一噸原油的去向」和「調和池組成」按區間中值示意，合計為100%。行業數據取自金聯創、隆眾等機構的公開報導，口徑不完全一致。乾氣、氫氣、硫磺回收和公用工程未畫出。<br>By Harry汪</p>
+  <p class="foot">圖中百分比是典型地煉的經驗區間（佔原油加工量），不是某一家企業的實測或設計數值，各廠隨原油品質、重質原料摻煉比例、裝置配置和負荷差別很大。加工裝置標的是處理量佔原油的比例；「一噸原油的去向」和「調和池組成」按區間中值示意，合計為100%。產業數據取自金聯創、隆眾等機構的公開報導，口徑不完全一致。乾氣、氫氣、硫磺回收和公用工程未畫出。<br>By Harry汪</p>
 </div>
+</template>
+<template id="t-zh-CN">
+<div class="page">
+  <header>
+    <div>
+      <h1>山东地炼流程图<span class="by">@Harry汪</span></h1>
+      <p class="lede">一吨原油在山东地炼里怎么走：主线从常压、减压到催化、焦化，各装置产出的汽油、柴油汇进两个调和池。鼠标停在方块上看说明，可以移进说明框里阅读。</p>
+    </div>
+    <div class="seg" role="group" aria-label="选择配置">
+      <button type="button" id="m-fuel" data-m="fuel">传统燃料型</button>
+      <button type="button" id="m-up" data-m="up">转型升级型</button>
+    </div>
+  </header>
 
+  <section class="summary">
+    <p id="mdesc"></p>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="legend">
+    <span><i style="background:var(--light)"></i>汽油系（石脑油、汽油）</span>
+    <span><i style="background:var(--mid)"></i>柴油系</span>
+    <span><i style="background:var(--heavy)"></i>重油（渣油、蜡油、油浆）</span>
+    <span><i style="background:var(--gas)"></i>液化气</span>
+    <span><i style="background:var(--coke)"></i>石油焦</span>
+    <span id="lg-up"><i style="background:var(--jet)"></i>航空煤油 <i style="background:var(--chem);margin-left:8px"></i>化工品</span>
+    <span>方块内：规模（万吨/年）· 占原油的典型比例</span>
+  </div>
+
+  <div class="board" id="board">
+    <div class="scroll" id="scroll"><svg id="svg" viewBox="0 0 1250 600" role="img" aria-label="山东地炼工艺流程图"></svg></div>
+    <div class="tip" id="tip" hidden></div>
+  </div>
+
+  <div class="split">
+    <section class="panel">
+      <h2>一吨原油的去向<small>典型值示意，%</small></h2>
+      <div class="stack" id="fate"></div>
+      <div class="keys" id="fatekeys"></div>
+    </section>
+    <section class="panel">
+      <h2>调和池组成<small>各装置贡献的比例，典型值示意</small></h2>
+      <div class="pools" id="poolbars"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>山东地炼概况</h2>
+    <ul>
+      <li>2024年11月山东地炼产能约1.17亿吨/年，占全省炼能的66%；独立炼厂从2015年的37家减到2024年的19家。</li>
+      <li>2025年平均开工率约52%，明显低于主营炼厂的72%左右，主要卡在原油进口配额和成品油利润。</li>
+      <li>原油配额不够时，地炼用不占配额的燃料油、稀释沥青、外购蜡油顶替，所以渣油比例高、焦化规模大、石油焦多。</li>
+      <li>整合与淘汰：裕龙岛项目整合10家地炼、退出约2700万吨产能；200万吨/年以下的小炼厂按要求在2025年底前淘汰。省内目标是把地炼产能压到9000万吨左右，成品油收率降到40%左右。</li>
+      <li>2026年原油非国营贸易进口配额总量持平，新增部分主要给了大型一体化项目，中小地炼配额被削减；成品油出口配额没有给山东地炼。</li>
+    </ul>
+  </section>
+
+  <p class="foot">图中百分比是典型地炼的经验区间（占原油加工量），不是某一家企业的实测或设计数值，各厂随原油品质、重质原料掺炼比例、装置配置和负荷差别很大。加工装置标的是处理量占原油的比例；“一吨原油的去向”和“调和池组成”按区间中值示意，合计为100%。行业数据取自金联创、隆众等机构的公开报道，口径不完全一致。干气、氢气、硫磺回收和公用工程未画出。<br>By Harry汪</p>
+</div>
+</template>
+<template id="t-en">
+<div class="page">
+  <header>
+    <div>
+      <h1>Shandong Teapot Refinery Flow<span class="by">@Harry汪</span></h1>
+      <p class="lede">How a tonne of crude moves through a Shandong independent (“teapot”) refinery: the main line runs from atmospheric and vacuum distillation to the cat cracker and coker, and each unit’s gasoline and diesel flow into two blending pools. Hover over a box for details; you can move the pointer into the details box to read it.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Choose configuration">
+      <button type="button" id="m-fuel" data-m="fuel">Fuels-oriented</button>
+      <button type="button" id="m-up" data-m="up">Upgraded</button>
+    </div>
+  </header>
+
+  <section class="summary">
+    <p id="mdesc"></p>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="legend">
+    <span><i style="background:var(--light)"></i>Gasoline range (naphtha, gasoline)</span>
+    <span><i style="background:var(--mid)"></i>Diesel range</span>
+    <span><i style="background:var(--heavy)"></i>Heavy oil (residue, gas oil, slurry)</span>
+    <span><i style="background:var(--gas)"></i>LPG</span>
+    <span><i style="background:var(--coke)"></i>Petcoke</span>
+    <span id="lg-up"><i style="background:var(--jet)"></i>Jet fuel <i style="background:var(--chem);margin-left:8px"></i>Chemicals</span>
+    <span>In boxes: capacity (10⁴ t/yr; 100 = 1 Mt/yr) · typical share of crude</span>
+  </div>
+
+  <div class="board" id="board">
+    <div class="scroll" id="scroll"><svg id="svg" viewBox="0 0 1250 600" role="img" aria-label="Shandong teapot refinery process flow diagram"></svg></div>
+    <div class="tip" id="tip" hidden></div>
+  </div>
+
+  <div class="split">
+    <section class="panel">
+      <h2>Where a tonne of crude goes<small>typical values, %</small></h2>
+      <div class="stack" id="fate"></div>
+      <div class="keys" id="fatekeys"></div>
+    </section>
+    <section class="panel">
+      <h2>Blending pool make-up<small>share contributed by each unit, typical values</small></h2>
+      <div class="pools" id="poolbars"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Shandong teapots at a glance</h2>
+    <ul>
+      <li>In November 2024 Shandong’s independent refiners had about 117 Mt/yr of capacity, 66% of the province’s total. Their number fell from 37 in 2015 to 19 in 2024.</li>
+      <li>Average run rates in 2025 were about 52%, well below the roughly 72% at state-owned refineries, held back mainly by crude import quotas and fuel margins.</li>
+      <li>When crude quotas run short, teapots substitute quota-free fuel oil, diluted bitumen and purchased gas oil. That is why their residue share is high, their cokers are large and they make a lot of petcoke.</li>
+      <li>Consolidation and closures: the Yulong Island project absorbed 10 teapots and retired about 27 Mt/yr of capacity, and refineries under 2 Mt/yr were due to close by the end of 2025. The province aims to cut teapot capacity to about 90 Mt/yr and the refined-fuel yield to about 40%.</li>
+      <li>Non-state crude import quotas for 2026 are flat in total; new allocations went mainly to large integrated projects, while small and mid-sized teapots saw cuts. No Shandong teapot received a fuel export quota.</li>
+    </ul>
+  </section>
+
+  <p class="foot">Percentages are typical ranges for a teapot refinery (share of crude runs), not measured or design figures for any one company; plants vary widely with crude quality, heavy-feed blending, configuration and run rates. Process units show throughput as a share of crude. “Where a tonne of crude goes” and “Blending pool make-up” use range midpoints and add up to 100%. Industry figures come from public reports by JLC, OilChem and others, whose bases differ somewhat. Dry gas, hydrogen, sulfur recovery and utilities are not drawn.<br>By Harry汪</p>
+</div>
+</template>
 <script>
+window.__APP=window.__APP||{};
+window.__APP["zh-TW"]=function(){
+
 /* ---------- 節點：x,y 為中心；y_ 為各配置佔原油的比例，s 為規模；m:'up' 只在轉型型出現 ---------- */
 const N={
- crude:{x:70,y:230,w:110,k:'feed',n:'進口原油',e:'Imported crude',s:{fuel:'300–600',up:'500–1000'},
+ crude:{x:66,y:230,w:116,k:'feed',n:'進口原油',e:'Imported crude',s:{fuel:'300–600',up:'500–1000'},
   d:'地煉主要原料，靠非國營貿易進口配額取得。',u:'配額收緊時開工率隨之下降。'},
  cdu:{x:210,y:230,k:'unit',n:'常壓蒸餾',e:'CDU',y_:{fuel:'100%',up:'100%'},
   d:'原油加熱到約360°C，在常壓塔內按沸點切割，不發生化學反應。',u:'塔頂出液化氣和石腦油（約220°C以前），側線出柴油，塔底的常壓渣油（地煉習慣叫燃料油）去減壓。'},
@@ -205,15 +337,15 @@ const N={
  jet:{x:1160,y:390,k:'prod',c:'jet',n:'航空煤油',e:'Jet fuel',m:'up',y_:{up:'5–9%'},
   d:'加氫裂化的煤油餾分。',u:'航空燃料，需求增長比汽柴油好。'},
  gas:{x:1160,y:470,k:'prod',c:'light',n:'汽油',e:'Gasoline',y_:{fuel:'25–30%',up:'22–27%'},
-  d:'汽油池各組分經加氫脫硫後調和成國六汽油。',u:'車用燃料。'},
+  d:'催化汽油加氫脫硫後，與重整汽油、MTBE、烷基化油等調和成國六汽油。',u:'車用燃料。'},
  dsl:{x:1160,y:545,k:'prod',c:'mid',n:'柴油',e:'Diesel',y_:{fuel:'36–42%',up:'27–33%'},
   d:'柴油池各組分經加氫精製後調和成國六柴油。',u:'地煉傳統上最大的產品，近年需求見頂，是減產重點。'},
- gpool:{pool:1,x1:130,x2:1010,y:470,c:'light',n:'汽油池',e:'Gasoline pool',d:'各裝置產出的汽油組分在這裡匯合，加氫脫硫後調和。',u:'辛烷值靠重整汽油和MTBE、烷基化油拉高。'},
+ gpool:{pool:1,x1:130,x2:1010,y:470,c:'light',n:'汽油池',e:'Gasoline pool',d:'各裝置產出的汽油組分在這裡匯合。催化汽油要加氫脫硫，重整汽油、MTBE、烷基化油可直接調和。',u:'辛烷值靠重整汽油和MTBE、烷基化油拉高；焦化汽油辛烷值低，加氫後多送重整，直接調和的量很少。'},
  dpool:{pool:1,x1:130,x2:1010,y:545,c:'mid',n:'柴油池',e:'Diesel pool',d:'各裝置產出的柴油組分在這裡匯合，加氫精製後調和。',u:'直餾柴油品質最好，催化柴油、焦化柴油要深度加氫。'}
 };
 /* ---------- 物流：p 為折線點；l/lx/ly 為標籤 ---------- */
 const E=[
- {f:'crude',t:'cdu',c:'heavy',p:[[125,230],[140,230]]},
+ {f:'crude',t:'cdu',c:'heavy',p:[[124,230],[140,230]]},
  {f:'cdu',t:'vdu',c:'heavy',p:[[280,230],[390,230]],l:'常壓渣油（燃料油）',lx:335,ly:218,a:'middle'},
  {f:'fo',t:'vdu',c:'heavy',p:[[310,301],[310,236]],dash:1},
  {f:'cdu',t:'ref',c:'light',p:[[210,201],[210,70],[260,70]],l:'石腦油 ≤220°C',lx:216,ly:110},
@@ -294,8 +426,8 @@ function draw(){
     if(o.pool){
       g=el('g',{class:'node pool','data-id':id,tabindex:0,role:'button','aria-label':o.n},gP);
       el('rect',{x:o.x1,y:o.y-13,width:o.x2-o.x1,height:26,rx:13,style:`fill:var(--${o.c})`},g);
-      el('text',{x:o.x1+16,y:o.y+5,class:'pn'},g).textContent=o.n;
-      el('text',{x:o.x1+80,y:o.y+4,class:'pv'},g).textContent='佔原油 '+poolTotal(id);
+      const pn=el('text',{x:o.x1+16,y:o.y+5,class:'pn'},g);pn.textContent=o.n;
+      el('text',{x:o.x1+16+pn.getComputedTextLength()+14,y:o.y+4,class:'pv'},g).textContent='佔原油 '+poolTotal(id);
     }else{
       const w=o.w||140,h=o.h||58;
       g=el('g',{class:`node ${o.k}`,'data-id':id,tabindex:0,role:'button','aria-label':o.n,transform:`translate(${o.x-w/2},${o.y-h/2})`},gN);
@@ -372,4 +504,444 @@ function setMode(m){mode=MODES[m]?m:'fuel';pinned=null;
 for(const b of document.querySelectorAll('.seg button'))b.addEventListener('click',()=>{location.hash=b.dataset.m;setMode(b.dataset.m)});
 window.addEventListener('hashchange',()=>setMode(location.hash.slice(1)));
 setMode(location.hash.slice(1));
+
+};
+</script>
+<script>
+window.__APP=window.__APP||{};
+window.__APP["zh-CN"]=function(){
+
+/* ---------- 节点：x,y 为中心；y_ 为各配置占原油的比例，s 为规模；m:'up' 只在转型型出现 ---------- */
+const N={
+ crude:{x:66,y:230,w:116,k:'feed',n:'进口原油',e:'Imported crude',s:{fuel:'300–600',up:'500–1000'},
+  d:'地炼主要原料，靠非国营贸易进口配额取得。',u:'配额收紧时开工率随之下降。'},
+ cdu:{x:210,y:230,k:'unit',n:'常压蒸馏',e:'CDU',y_:{fuel:'100%',up:'100%'},
+  d:'原油加热到约360°C，在常压塔内按沸点切割，不发生化学反应。',u:'塔顶出液化气和石脑油（约220°C以前），侧线出柴油，塔底的常压渣油（地炼习惯叫燃料油）去减压。'},
+ fo:{x:310,y:320,w:130,h:38,k:'tag',n:'外购燃料油·稀释沥青',e:'Fuel oil / dilbit',
+  d:'不占原油配额的重质原料，包括进口燃料油、稀释沥青、外购渣油。',u:'和常压渣油一起进减压塔。掺得越多，渣油越多，石油焦和焦化负荷越大。'},
+ vdu:{x:460,y:230,k:'unit',n:'减压蒸馏',e:'VDU',y_:{fuel:'55–65%',up:'50–60%'},
+  d:'在真空下继续蒸馏常压渣油，避免高温结焦。',u:'侧线出少量减压柴油（减一线）和蜡油（360–540°C），塔底是减压渣油。'},
+ vgoin:{x:560,y:150,w:110,h:38,k:'tag',n:'外购蜡油',e:'Purchased VGO',
+  d:'从别的炼厂或贸易商买进的蜡油。',u:'直接补进催化裂化，提高催化负荷。'},
+ ref:{x:330,y:70,k:'unit',n:'催化重整',e:'Reformer',s:{fuel:'40–100',up:'60–150'},y_:{fuel:'10–14%',up:'12–16%'},
+  d:'把石脑油中的环烷烃、链烷烃转成芳烃，辛烷值从60多提高到90以上。',u:'重整汽油是高辛烷值调和组分；副产氢气，供加氢精制使用。'},
+ aro:{x:520,y:70,k:'prod',c:'chem',n:'芳烃',e:'BTX',m:'up',y_:{up:'4–7%'},
+  d:'从重整生成油抽提苯、甲苯、二甲苯。',u:'外售做化工原料，抽余油做溶剂油。'},
+ fcc:{x:710,y:230,k:'unit',n:'催化裂化',e:'FCC',s:{fuel:'120–250',up:'150–300'},y_:{fuel:'28–35%',up:'22–30%'},
+  d:'蜡油在催化剂上裂化，不耗氢。地炼的核心装置。',u:'产催化汽油、催化柴油、富含丙烯的液化气，塔底剩油浆（油渣）去焦化或做燃料油。'},
+ hcu:{x:610,y:390,w:130,k:'unit',n:'加氢裂化',e:'Hydrocracker',m:'up',s:{up:'100–200'},y_:{up:'8–15%'},
+  d:'蜡油在高压氢气下裂化。',u:'多产航煤，少产柴油，是地炼压减柴油的主要手段。'},
+ lpgu:{x:840,y:70,k:'unit',n:'气分·MTBE',e:'Gas plant / MTBE',y_:{fuel:'5–7%',up:'6–8%'},
+  d:'液化气脱硫后分出丙烯、C4；C4里的异丁烯和甲醇做成MTBE，剩下的C4可做烷基化油。',u:'MTBE和烷基化油回汽油池；丙烯外售或做聚丙烯；其余做民用液化气。'},
+ coker:{x:960,y:230,k:'unit',n:'延迟焦化',e:'Delayed coker',s:{fuel:'100–200',up:'100–200'},y_:{fuel:'33–42%',up:'25–35%'},
+  d:'渣油和油浆高温热裂化，把碳以石油焦的形式脱掉。投资低，能吃最差的原料。',u:'产焦化汽油、焦化柴油（都要加氢）、焦化蜡油（回催化）和石油焦。'},
+ coke:{x:1160,y:230,k:'prod',c:'coke',n:'石油焦',e:'Petcoke',y_:{fuel:'8–12%',up:'6–9%'},
+  d:'焦化装置的固体产物。',u:'低硫焦做预焙阳极、负极材料；高硫焦作燃料。'},
+ pp:{x:1160,y:62,k:'prod',c:'chem',n:'丙烯·聚丙烯',e:'Propylene / PP',m:'up',y_:{up:'2–4%'},
+  d:'气分出来的丙烯，部分企业自建聚丙烯。',u:'注塑件、薄膜、纤维。'},
+ lpg:{x:1160,y:140,k:'prod',c:'gas',n:'液化气',e:'LPG',y_:{fuel:'4–6%',up:'3–5%'},
+  d:'提走丙烯和C4后剩下的液化气。',u:'民用和工业燃料。'},
+ jet:{x:1160,y:390,k:'prod',c:'jet',n:'航空煤油',e:'Jet fuel',m:'up',y_:{up:'5–9%'},
+  d:'加氢裂化的煤油馏分。',u:'航空燃料，需求增长比汽柴油好。'},
+ gas:{x:1160,y:470,k:'prod',c:'light',n:'汽油',e:'Gasoline',y_:{fuel:'25–30%',up:'22–27%'},
+  d:'催化汽油加氢脱硫后，与重整汽油、MTBE、烷基化油等调和成国六汽油。',u:'车用燃料。'},
+ dsl:{x:1160,y:545,k:'prod',c:'mid',n:'柴油',e:'Diesel',y_:{fuel:'36–42%',up:'27–33%'},
+  d:'柴油池各组分经加氢精制后调和成国六柴油。',u:'地炼传统上最大的产品，近年需求见顶，是减产重点。'},
+ gpool:{pool:1,x1:130,x2:1010,y:470,c:'light',n:'汽油池',e:'Gasoline pool',d:'各装置产出的汽油组分在这里汇合。催化汽油要加氢脱硫，重整汽油、MTBE、烷基化油可直接调和。',u:'辛烷值靠重整汽油和MTBE、烷基化油拉高；焦化汽油辛烷值低，加氢后多送重整，直接调和的量很少。'},
+ dpool:{pool:1,x1:130,x2:1010,y:545,c:'mid',n:'柴油池',e:'Diesel pool',d:'各装置产出的柴油组分在这里汇合，加氢精制后调和。',u:'直馏柴油品质最好，催化柴油、焦化柴油要深度加氢。'}
+};
+/* ---------- 物流：p 为折线点；l/lx/ly 为标签 ---------- */
+const E=[
+ {f:'crude',t:'cdu',c:'heavy',p:[[124,230],[140,230]]},
+ {f:'cdu',t:'vdu',c:'heavy',p:[[280,230],[390,230]],l:'常压渣油（燃料油）',lx:335,ly:218,a:'middle'},
+ {f:'fo',t:'vdu',c:'heavy',p:[[310,301],[310,236]],dash:1},
+ {f:'cdu',t:'ref',c:'light',p:[[210,201],[210,70],[260,70]],l:'石脑油 ≤220°C',lx:216,ly:110},
+ {f:'ref',t:'aro',c:'chem',p:[[400,70],[450,70]],m:'up'},
+ {f:'vdu',t:'fcc',c:'heavy',p:[[530,230],[640,230]],l:'蜡油',lx:605,ly:218,a:'middle'},
+ {f:'vgoin',t:'fcc',c:'heavy',p:[[560,169],[560,224]],dash:1},
+ {f:'vdu',t:'hcu',c:'heavy',p:[[610,230],[610,361]],m:'up'},
+ {f:'vdu',t:'coker',c:'heavy',p:[[480,259],[480,330],[915,330],[915,259]],l:'减压渣油（油渣）',lx:488,ly:322},
+ {f:'fcc',t:'coker',c:'heavy',p:[[780,230],[890,230]],l:'油浆',lx:835,ly:218,a:'middle'},
+ {f:'coker',t:'fcc',c:'heavy',p:[[910,201],[910,172],[745,172],[745,201]],dash:1,l:'焦化蜡油回催化',lx:828,ly:165,a:'middle'},
+ {f:'coker',t:'coke',c:'coke',p:[[1030,230],[1090,230]]},
+ {f:'fcc',t:'lpgu',c:'gas',p:[[710,201],[710,70],[770,70]],l:'液化气',lx:716,ly:110},
+ {f:'coker',t:'lpgu',c:'gas',p:[[950,201],[950,132],[880,132],[880,99]]},
+ {f:'lpgu',t:'pp',c:'chem',p:[[910,62],[1090,62]],m:'up',l:'丙烯',lx:1000,ly:55,a:'middle'},
+ {f:'lpgu',t:'lpg',c:'gas',p:[[910,84],[1040,84],[1040,140],[1090,140]]},
+ {f:'hcu',t:'jet',c:'jet',p:[[675,390],[1090,390]],m:'up',l:'航煤',lx:1050,ly:382,a:'middle'},
+ /* 落入汽油池 */
+ {f:'ref',t:'gpool',c:'light',p:[[385,99],[385,452]],l:'重整汽油',lx:391,ly:446},
+ {f:'fcc',t:'gpool',c:'light',p:[[690,259],[690,452]],l:'催化汽油',lx:696,ly:446},
+ {f:'lpgu',t:'gpool',c:'light',p:[[860,99],[860,452]],l:'MTBE·烷基化油',lx:866,ly:446},
+ {f:'coker',t:'gpool',c:'light',p:[[965,259],[965,452]],l:'焦化汽油',lx:959,ly:425,a:'end'},
+ /* 落入柴油池 */
+ {f:'cdu',t:'dpool',c:'mid',p:[[210,259],[210,527]],l:'直馏柴油',lx:216,ly:520},
+ {f:'vdu',t:'dpool',c:'mid',p:[[430,259],[430,527]],l:'减一线',lx:436,ly:520},
+ {f:'hcu',t:'dpool',c:'mid',p:[[610,419],[610,527]],m:'up',l:'加氢裂化柴油',lx:616,ly:520},
+ {f:'fcc',t:'dpool',c:'mid',p:[[730,259],[730,527]],l:'催化柴油',lx:736,ly:520},
+ {f:'coker',t:'dpool',c:'mid',p:[[1000,259],[1000,527]],l:'焦化柴油',lx:1006,ly:425},
+ /* 池到成品 */
+ {f:'gpool',t:'gas',c:'light',p:[[1012,470],[1090,470]],l:'加氢·调和',lx:1050,ly:458,a:'middle'},
+ {f:'dpool',t:'dsl',c:'mid',p:[[1012,545],[1090,545]],l:'加氢·调和',lx:1050,ly:533,a:'middle'}
+];
+/* ---------- 各配置的数字（中值示意，合计100%） ---------- */
+const MODES={
+ fuel:{desc:'山东地炼的主流配置：常减压配催化裂化和延迟焦化，靠脱碳转化渣油，产品以汽油、柴油为主。投资低、原料适应性强，但液体收率低、石油焦多，柴油比例偏高。',
+  kpi:[['成品油收率','63–72%',''],['汽油','25–30%','light'],['柴油','36–42%','mid'],['石油焦','8–12%','coke']],
+  fate:[['汽油',28,'light'],['柴油',40,'mid'],['液化气',5,'gas'],['石油焦',10,'coke'],['干气·自用·损失',8,'heavy'],['其他',9,'soft']],
+  pools:{gpool:[['催化汽油',48],['重整汽油',34],['焦化汽油',14],['MTBE',4]],dpool:[['直馏柴油',60],['减一线',4],['催化柴油',16],['焦化柴油',20]]},
+  other:'其他：油浆和燃料油外售、道路沥青、外售石脑油、硫磺等。'},
+ up:{desc:'在燃料型的基础上加加氢裂化和丙烯、芳烃下游，走“减油增化”：柴油明显减少，多出航煤、芳烃和聚丙烯，焦化负荷也降下来。成品油收率仍远高于大型一体化炼厂的30%左右。',
+  kpi:[['成品油收率','55–65%',''],['汽油','22–27%','light'],['柴油','27–33%','mid'],['石油焦','6–9%','coke']],
+  fate:[['汽油',25,'light'],['柴油',30,'mid'],['航煤',7,'jet'],['化工品',9,'chem'],['液化气',5,'gas'],['石油焦',8,'coke'],['干气·自用·损失',9,'heavy'],['其他',7,'soft']],
+  pools:{gpool:[['催化汽油',46],['重整汽油',32],['焦化汽油',12],['MTBE·烷基化油',10]],dpool:[['直馏柴油',60],['减一线',3],['催化柴油',17],['焦化柴油',17],['加氢裂化柴油',3]]},
+  other:'其他：油浆和燃料油外售、道路沥青、溶剂油、硫磺等。'}
+};
+const FEED=new Set(['cdu','vdu','ref','fcc','hcu','lpgu','coker']);
+const POOLSHADE={gpool:['var(--light)','#b57d06','#f0c35a','#7d5703','#f6d892'],dpool:['var(--mid)','#1a6f61','#5cc0ae','#0f4c42','#9ad8cc']};
+
+/* ---------- 绘图 ---------- */
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('svg'),tip=document.getElementById('tip'),board=document.getElementById('board');
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let mode='fuel',nodesEl={},edgesEl=[],pinned=null,hideT=null,showT=null;
+const vis=o=>!o.m||o.m===mode;
+const poolTotal=id=>N[id==='gpool'?'gas':'dsl'].y_[mode];
+function path(pts){
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length-1;i++){const a=pts[i-1],b=pts[i],c=pts[i+1],l1=Math.hypot(b[0]-a[0],b[1]-a[1]),l2=Math.hypot(c[0]-b[0],c[1]-b[1]),r=Math.min(10,l1/2,l2/2);
+    d+=`L${b[0]+(a[0]-b[0])/l1*r},${b[1]+(a[1]-b[1])/l1*r}Q${b[0]},${b[1]} ${b[0]+(c[0]-b[0])/l2*r},${b[1]+(c[1]-b[1])/l2*r}`}
+  const z=pts[pts.length-1];return d+`L${z[0]},${z[1]}`;
+}
+function chipText(o){
+  const s=o.s&&o.s[mode],y=o.y_&&o.y_[mode];
+  if(o.k==='feed')return s?s+' 万吨/年':'';
+  return [s,y].filter(Boolean).join(' · ');
+}
+function draw(){
+  hide();svg.innerHTML='';nodesEl={};edgesEl=[];
+  const defs=el('defs',{},svg);
+  for(const c of ['gas','light','mid','jet','heavy','coke','chem']){const m=el('marker',{id:'a-'+c,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:9,markerHeight:9,orient:'auto',markerUnits:'userSpaceOnUse'},defs);el('path',{d:'M1,1.5L9,5L1,8.5z',style:`fill:var(--${c})`},m)}
+  const gF=el('g',{},svg),gP=el('g',{},svg),gL=el('g',{},svg),gN=el('g',{},svg);
+  for(const e of E){if(!vis(e))continue;
+    const pe=el('path',{d:path(e.p),class:`flow c-${e.c}${e.dash?' dash':''}`,'marker-end':`url(#a-${e.c})`},gF);
+    let lab=null;if(e.l){lab=el('text',{x:e.lx,y:e.ly,class:'flab','text-anchor':e.a||'start'},gL);lab.textContent=e.l}
+    edgesEl.push({e:pe,lab,f:e.f,t:e.t,l:e.l||''});
+  }
+  for(const id in N){const o=N[id];if(!vis(o))continue;
+    let g;
+    if(o.pool){
+      g=el('g',{class:'node pool','data-id':id,tabindex:0,role:'button','aria-label':o.n},gP);
+      el('rect',{x:o.x1,y:o.y-13,width:o.x2-o.x1,height:26,rx:13,style:`fill:var(--${o.c})`},g);
+      const pn=el('text',{x:o.x1+16,y:o.y+5,class:'pn'},g);pn.textContent=o.n;
+      el('text',{x:o.x1+16+pn.getComputedTextLength()+14,y:o.y+4,class:'pv'},g).textContent='占原油 '+poolTotal(id);
+    }else{
+      const w=o.w||140,h=o.h||58;
+      g=el('g',{class:`node ${o.k}`,'data-id':id,tabindex:0,role:'button','aria-label':o.n,transform:`translate(${o.x-w/2},${o.y-h/2})`},gN);
+      const r=el('rect',{class:'card',width:w,height:h,rx:o.k==='tag'?8:12},g);
+      if(o.k==='prod')r.setAttribute('style',`fill:var(--${o.c}-t);stroke:var(--${o.c})`);
+      const chip=chipText(o);
+      el('text',{x:w/2,y:chip?h/2-3:h/2+5,class:'nm'},g).textContent=o.n;
+      if(chip){const t=el('text',{x:w/2,y:h/2+15,class:'ch'},g);t.textContent=chip;if(o.k==='prod')t.setAttribute('style',`fill:var(--${o.c})`)}
+    }
+    nodesEl[id]=g;
+    g.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT);if(pinned)return;if(tip.hidden)show(id);else showT=setTimeout(()=>show(id),150)});
+    g.addEventListener('mouseleave',()=>{clearTimeout(showT);if(!pinned)hideSoon()});
+    g.addEventListener('focus',()=>{if(!pinned)show(id)});
+    g.addEventListener('blur',()=>{if(!pinned)hide()});
+    g.addEventListener('click',ev=>{ev.stopPropagation();if(pinned===id){pinned=null;hide()}else{pinned=id;show(id)}});
+    g.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pinned=null;hide()}});
+  }
+}
+const nm=id=>N[id].n;
+function show(id){
+  const o=N[id],M=MODES[mode];
+  svg.classList.add('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');nodesEl[id].classList.add('on');
+  const ins=[],outs=[];
+  for(const x of edgesEl){const on=x.f===id||x.t===id;x.e.classList.toggle('on',on);x.lab&&x.lab.classList.toggle('on',on);
+    if(x.t===id){nodesEl[x.f].classList.add('on');ins.push(nm(x.f)+(x.l?`（${x.l}）`:''))}
+    if(x.f===id){nodesEl[x.t].classList.add('on');outs.push(nm(x.t)+(x.l?`（${x.l}）`:''))}}
+  let yl='';
+  if(o.pool)yl=`占原油 ${poolTotal(id)}，组成如下（中值示意）：`;
+  else{const y=o.y_&&o.y_[mode],s=o.s&&o.s[mode],parts=[];
+    if(s)parts.push(`规模 ${s} 万吨/年`);
+    if(y)parts.push(FEED.has(id)?`处理量约占原油 ${y}`:`出率约 ${y}（占原油）`);
+    yl=parts.join('，');}
+  const comp=o.pool?`<ul>${M.pools[id].map(([n,v])=>`<li><span>${esc(n)}</span><span>${v}%</span></li>`).join('')}</ul>`:'';
+  const unit=FEED.has(id);
+  tip.innerHTML=`<h3>${esc(o.n)}<span>${esc(o.e)}</span></h3>${yl?`<div class="yl">${esc(yl)}</div>`:''}${comp}
+    <p><b class="k">${unit?'这一步做什么':'是什么'}</b>${esc(o.d)}</p><p><b class="k">${unit?'产物去向':'用处'}</b>${esc(o.u)}</p>
+    ${ins.length||outs.length?`<div class="io">${ins.length?`<span>← 来自：${esc(ins.join('、'))}</span>`:''}${outs.length?`<span>→ 去往：${esc(outs.join('、'))}</span>`:''}</div>`:''}`;
+  tip.hidden=false;
+  const nr=nodesEl[id].getBoundingClientRect(),wr=board.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left,top;
+  if(o.pool){left=Math.min(Math.max(4,nr.left-wr.left+40),wr.width-tw-4);top=nr.top-wr.top-th-10;if(top<4)top=nr.bottom-wr.top+10}
+  else{left=nr.right-wr.left+12;if(left+tw>wr.width-4)left=nr.left-wr.left-tw-12;if(left<4)left=Math.max(4,Math.min(wr.width-tw-4,nr.left-wr.left));
+    top=nr.top-wr.top-10;const over=left<nr.right-wr.left&&left+tw>nr.left-wr.left;if(over)top=nr.bottom-wr.top+10;
+    top=Math.max(4,Math.min(top,Math.max(4,wr.height-th-4)));
+    if(!over)top=Math.max(4,Math.min(top,window.innerHeight-wr.top-th-8));}
+  tip.style.left=left+'px';tip.style.top=top+'px';
+}
+function hide(){tip.hidden=true;svg.classList.remove('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');for(const x of edgesEl){x.e.classList.remove('on');x.lab&&x.lab.classList.remove('on')}}
+function hideSoon(){clearTimeout(hideT);hideT=setTimeout(()=>{if(!pinned)hide()},200)}
+tip.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT)});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideSoon()});
+tip.addEventListener('click',ev=>ev.stopPropagation());
+document.addEventListener('click',()=>{if(pinned){pinned=null;hide()}});
+document.getElementById('scroll').addEventListener('scroll',()=>{if(pinned)show(pinned)});
+
+/* ---------- 摘要、去向、调和池 ---------- */
+function panels(){
+  const M=MODES[mode];
+  document.getElementById('mdesc').textContent=M.desc;
+  document.getElementById('kpis').innerHTML=M.kpi.map(([t,v,c])=>`<div class="kpi"><span>${t}</span><b class="${c}">${v}</b></div>`).join('');
+  const col=c=>c==='soft'?'var(--muted)':`var(--${c})`;
+  document.getElementById('fate').innerHTML=M.fate.map(([n,v,c])=>`<div style="flex:${v};background:${col(c)}" title="${n} ${v}%">${v>=6?v+'%':''}</div>`).join('');
+  document.getElementById('fatekeys').innerHTML=M.fate.map(([n,v,c])=>`<span><i style="background:${col(c)}"></i>${n} <b>${v}%</b></span>`).join('')+`<span>${esc(M.other)}</span>`;
+  document.getElementById('poolbars').innerHTML=['gpool','dpool'].map(id=>{
+    const sh=POOLSHADE[id],list=M.pools[id];
+    return `<div class="prow"><span class="t">${N[id].n}<span style="color:var(--muted);font-weight:400;margin-left:8px">占原油 ${poolTotal(id)}</span></span>
+      <div class="stack">${list.map(([n,v],i)=>`<div style="flex:${v};background:${sh[i]}" title="${n} ${v}%">${v>=10?v+'%':''}</div>`).join('')}</div>
+      <div class="keys">${list.map(([n,v],i)=>`<span><i style="background:${sh[i]}"></i>${n} <b>${v}%</b></span>`).join('')}</div></div>`}).join('');
+  document.getElementById('lg-up').hidden=mode!=='up';
+}
+function setMode(m){mode=MODES[m]?m:'fuel';pinned=null;
+  for(const b of document.querySelectorAll('.seg button'))b.setAttribute('aria-pressed',b.dataset.m===mode);
+  draw();panels();}
+for(const b of document.querySelectorAll('.seg button'))b.addEventListener('click',()=>{location.hash=b.dataset.m;setMode(b.dataset.m)});
+window.addEventListener('hashchange',()=>setMode(location.hash.slice(1)));
+setMode(location.hash.slice(1));
+
+};
+</script>
+<script>
+window.__APP=window.__APP||{};
+window.__APP["en"]=function(){
+const __ZH={"Five Refiners Compared": "五大煉化對比", "@Harry汪": "@Harry汪", "Choose refineries to compare": "選擇要比較的煉廠", "Scale and yields": "規模與出率", "Key differences": "主要區別", "worked out from your selection": "按所選煉廠自動比對", "Flow comparison": "流程對照", "Highlight differences only": "只突出有差異的", "Flow diagram comparing the selected refineries": "所選煉廠的流程對照圖", "Item by item": "逐項對照", "Show differences only": "只看有差異的", "Background": "背景", "By Harry汪": "By Harry汪", "Feedstock": "原料", "Distillation": "蒸餾", "Straight-run cuts": "直餾餾分", "Conversion": "二次加工", "Reforming · cracking | fuels": "重整·裂解｜成品油", "Olefins · aromatics": "烯烴·芳烴", "Intermediates": "中間體", "Derivatives · polymers": "衍生物·聚合物", "Downstream materials": "下游材料", "Ext. light feeds": "外購輕烴", "Crude oil": "原油", "Coal · petcoke": "煤·石油焦", "Crude unit (CDU)": "常壓蒸餾", "Vacuum unit (VDU)": "減壓蒸餾", "Light ends · LPG": "輕烴·液化氣", "Naphtha": "石腦油", "Kero/diesel cut": "煤柴油餾分", "Middle distillates.": "中間餾分油。", "Vacuum gas oil": "蠟油 VGO", "Heavy side cut from the vacuum column.": "減壓塔側線抽出的重餾分。", "Vacuum residue": "減壓渣油", "Gas plant": "輕烴回收·氣分", "Naphtha HDT": "石腦油加氫", "Diesel HCU": "柴油加氫裂化", "VGO hydrocracker": "蠟油加氫裂化", "Cat cracker (FCC)": "催化裂化", "Deasphalter (SDA)": "溶劑脫瀝青", "Resid hydro unit": "渣油加氫", "Delayed coker": "延遲焦化", "Hydrogen plant": "制氫", "PDH unit": "丙烷脫氫", "Dedicated propylene maker, with hydrogen as a by-product.": "專產丙烯，副產氫氣。", "Steam cracker": "乙烯裂解", "MTO unit": "甲醇制烯烴", "An olefin source that does not depend on crude.": "不靠原油的烯烴來源。", "CCR reformer": "連續重整", "Gasoline": "汽油", "Road transport fuel.": "車用燃料。", "Jet fuel": "航空煤油", "Diesel": "柴油", "Clean diesel after hydrotreating.": "加氫後的清潔柴油。", "Petcoke": "石油焦", "Solid by-product of the coker.": "焦化裝置的固體副產。", "Sulfur": "硫磺", "Propylene": "丙烯", "Ethylene": "乙烯", "The most basic building block of the petrochemical industry.": "石化工業最基礎的原料。", "Mixed C4 · BD": "混合C4·丁二烯", "Aromatics complex": "芳烴聯合", "Main product PX, by-product benzene.": "主產PX，副產苯。", "Acrylonitrile": "丙烯腈", "Propylene oxide": "環氧丙烷", "EO · MEG": "環氧乙烷·乙二醇", "Benzene": "苯", "Paraxylene (PX)": "對二甲苯 PX", "Almost all of it goes into PTA.": "幾乎全部用來生產PTA。", "Polypropylene": "聚丙烯 PP", "Polymerised propylene.": "丙烯聚合。", "High-pressure copolymer of ethylene and vinyl acetate.": "乙烯和醋酸乙烯高壓共聚。", "Polyethylene": "聚乙烯 PE", "Alkylate": "烷基化油", "Styrene": "苯乙烯", "Phenol/acetone": "苯酚丙酮", "Polycarbonate": "聚碳酸酯 PC", "PET polyester": "PET 聚酯", "overhead gas": "塔頂氣", "straight-run naphtha": "直餾石腦油", "kero/diesel draws": "煤柴油側線", "atmospheric residue": "常壓渣油", "vacuum gas oil": "減壓蠟油", "LPG": "液化氣", "heavy naphtha": "重石腦油", "light naphtha": "輕石腦油", "straight-run diesel": "直餾柴油", "gas oil": "蠟油", "residue": "渣油", "hydrotreated resid": "加氫重油", "hydrotreated gas oil": "加氫蠟油", "unconverted oil": "加氫尾油", "deasphalted oil": "脫瀝青油", "coker gas oil": "焦化蠟油", "acid gas recovery": "酸性氣回收", "gasifier feed": "氣化原料", "hydrogen": "氫氣", "ethane · propane": "乙烷·丙烷", "propane": "丙烷", "methanol": "甲醇", "saturated light ends": "飽和輕烴", "gas-plant propylene": "氣分丙烯", "pre-ether C4": "醚前C4", "treated naphtha": "精製石腦油", "jet fuel": "航煤", "FCC gasoline": "催化汽油", "FCC diesel": "催化柴油", "propylene-rich LPG": "富丙烯液化氣", "reformate": "重整汽油", "mixed C4": "混合C4", "pyrolysis gasoline": "裂解汽油", "isobutylene": "異丁烯", "post-ether C4": "醚後C4", "high-purity isobutylene": "高純異丁烯", "by-product HCN": "副產氫氰酸", "bisphenol A": "雙酚A", "Rongsheng·ZPC": "榮盛·浙石化", "Zhejiang Petrochemical": "浙江石化", "Crude runs": "原油加工", "Paraxylene": "對二甲苯", "Owners": "股東", "Start-up": "投產", "Residue route": "重油路線", "Why it matters": "看點", "Resid FCC, built in phase 1.": "重油催化裂化，一期配置。", "fixed bed + slurry": "固定床＋漿態床", "Built in phase 1.": "一期配置。", "coal/coke H₂": "煤焦制氫", "Partly gasified on site for hydrogen.": "部分自用於氣化制氫。", "off site · Yisheng": "廠外·逸盛", "off site": "廠外", "Hengli": "恆力", "Hengli Petrochemical": "恆力煉化", "Wholly owned by Hengli Petrochemical (Hengli Group)": "恆力石化（恆力集團）全資", "Handles unconverted oil from the ebullated-bed units.": "處理沸騰床的未轉化油。", "ebullated 2×320": "沸騰床 2×320", "coal-based H₂": "煤制氫", "Output kept very low.": "產量被壓到很低。", "on site 1200": "廠內 1200", "Kanghui New Materials": "康輝新材料", "Shenghong": "盛虹", "Shenghong Petrochemical": "盛虹煉化", "Wholly owned by Eastern Shenghong": "東方盛虹全資", "Whole train running in 2022": "2022年全流程打通", "Ext. MeOH · propane": "外購甲醇·丙烷", "Sailboat": "斯爾邦", "ebullated 330": "沸騰床 330", "Capacity to be verified.": "規模待核實。", "Sailboat 70": "斯爾邦 70", "Sailboat’s methanol-to-olefins unit.": "斯爾邦的甲醇制烯烴裝置。", "Sailboat 104": "斯爾邦 104", "China’s largest acrylonitrile producer.": "國內最大的丙烯腈生產商。", "Hongwei Chemical": "虹威化工", "PO/SM co-production.": "PO/SM聯產。", "Honggang Petrochemical": "虹港石化", "Guowang Hi-Tech": "國望高科", "Yulong": "裕龍", "Yulong Petrochemical": "裕龍石化", "Yulong Island, Longkou, Shandong": "山東龍口裕龍島", "Mixed aromatics": "混合芳烴", "Deep cat cracker": "催化裂解 DCC", "Arom. extraction": "芳烴抽提", "Mixed xylenes": "混二甲苯", "One atmospheric unit and one atmospheric-vacuum unit.": "一套常壓、一套常減壓。", "Two 1.5 Mt/yr crackers.": "兩套150萬噸裂解。", "butadiene 20": "丁二烯 20", "arom. 300": "混合芳烴 300", "Environmental-approval basis.": "環評口徑。", "Huajin Aramco": "華錦阿美", "Status": "進度", "High-propylene FCC": "高丙烯催化裂化", "Saudi Aramco supplies most of the crude.": "沙特阿美供應大部分原油。", "about 32%": "約32%", "Phase 1.": "一期。", "Ethylene capacity of the three crackers.": "三套裂解的乙烯產能。", "PX capacity.": "PX產能。", "Phase 1 152 + phase 2 131.": "一期152＋二期131。", "Phase 1 284 + phase 2 290.": "一期284＋二期290。", "To be verified.": "待核實。", "Design PX output.": "設計PX產量。", "Light chemical feed, sent to the steam cracker.": "化工輕油，送乙烯裂解。", "Butadiene.": "丁二烯。", "Ethylene capacity.": "乙烯產能。", "Phenol 40 + acetone 25.": "苯酚40＋丙酮25。", "Mixed aromatics.": "混合芳烴。", "Mixed xylenes.": "混二甲苯。", "Environmental-approval basis: 4×40 + 30.": "環評口徑4×40＋30。", "about 30%": "約30%", "Ethylene oxide/glycol.": "環氧乙烷/乙二醇。", "×10⁴ t/yr. No yield calculated.": "萬噸/年，不計出率。", "Throughput": "處理量", "÷ crude": "÷ 原油", "Yield": "出率", "No yield calculated.": "不計出率。", "Rongsheng·": "榮盛·", "Keep at least two": "至少保留兩家", "Crude runs (10⁴ t/yr)": "原油加工（萬噸/年）", "Refined-fuel yield": "成品油收率", "PX yield": "PX 出率", "Ethylene yield": "乙烯 出率", "Polyolefin (PP + PE) yield": "聚烯烴（PP＋PE）出率", "Glycol yield": "乙二醇 出率", "largest refinery": "煉油規模最大", "highest ethylene ratio": "乙烯配比最高", "highest PX ratio": "PX配比最高", "None": "沒有", "Only this plant has": "所選各廠中只有它有", "This plant has, the other lacks": "它有、對方沒有", "Only this plant lacks": "所選各廠中只有它沒有", "Only some plants have: ": "部分煉廠才有：", "does not have this unit": "沒有這套裝置", "all selected plants have it": "所選各廠都有", "only some plants have it": "只有部分廠有", "×10⁴ t/yr": "萬噸/年", ": none": "：沒有", "has it; capacity not found": "有，規模未查到", "Yes": "有", "of crude": "佔原油", "Location": "所在地", "Start-up / status": "投產／進度", "Refined-fuel basis": "成品油口徑", "Five Refiners Flowsheet": "五大煉化流程圖", "China’s Five Integrated Refining Complexes": "五大煉化一體化流程圖", "Process unit": "加工裝置", "Intermediate stream": "中間餾分", "Base chemical": "基礎化工原料", "Chemical product": "化工產品", "Fuels and by-products": "成品油及副產", "Not built at this plant": "本廠未配置", "Main flow": "主流程", "Recycle between units": "裝置間回煉", "Refinery process flow diagram": "煉化工藝流程圖", "not built": "未配置", " does not have this unit.": "沒有配置這套裝置。", "What this step does": "這一步做什麼", "What it is": "是什麼", "Where the products go": "產物去向", "Uses": "用處", "← From: ": "← 來自：", "→ To: ": "→ 去往：", "Refined fuels": "成品油", "Shandong Teapot Refinery Flow": "山東地煉流程圖", "Choose configuration": "選擇配置", "Fuels-oriented": "傳統燃料型", "Upgraded": "轉型升級型", "Gasoline range (naphtha, gasoline)": "汽油系（石腦油、汽油）", "Diesel range": "柴油系", "Heavy oil (residue, gas oil, slurry)": "重油（渣油、蠟油、油漿）", "Chemicals": "化工品", "Shandong teapot refinery process flow diagram": "山東地煉工藝流程圖", "Where a tonne of crude goes": "一噸原油的去向", "typical values, %": "典型值示意，%", "Blending pool make-up": "調和池組成", "Shandong teapots at a glance": "山東地煉概況", "Imported crude": "進口原油", "Fuel oil · dilbit": "外購燃料油·稀釋瀝青", "Purchased VGO": "外購蠟油", "Cat reformer": "催化重整", "Aromatics": "芳烴", "Hydrocracker": "加氫裂化", "Gas oil is cracked under high-pressure hydrogen.": "蠟油在高壓氫氣下裂化。", "Gas plant · MTBE": "氣分·MTBE", "Solid product of the coker.": "焦化裝置的固體產物。", "Propylene · PP": "丙烯·聚丙烯", "Injection mouldings, film and fibre.": "注塑件、薄膜、纖維。", "Household and industrial fuel.": "民用和工業燃料。", "The kerosene cut from the hydrocracker.": "加氫裂化的煤油餾分。", "Gasoline pool": "汽油池", "Diesel pool": "柴油池", "atm. resid": "常壓渣油（燃料油）", "naphtha ≤220°C": "石腦油 ≤220°C", "vacuum residue": "減壓渣油（油渣）", "slurry": "油漿", "coker gas oil back to FCC": "焦化蠟油回催化", "MTBE · alkylate": "MTBE·烷基化油", "coker gasoline": "焦化汽油", "1st vac. cut": "減一線", "HCU diesel": "加氫裂化柴油", "coker diesel": "焦化柴油", "treat · blend": "加氫·調和", "Dry gas · own use · loss": "乾氣·自用·損失", "Other": "其他", "; make-up (midpoint estimate):": "，組成如下（中值示意）：", "Capacity": "規模", "Throughput as share of crude:": "處理量約佔原油", "Yield about": "出率約", " (of crude)": "（佔原油）"};
+
+/* ---------- 節點: x,y 為中心; y_ 為各配置佔原油的比例, s 為規模; m:'up' 只在轉型型出現 ---------- */
+const N={
+ crude:{x:66,y:230,w:116,k:'feed',n:'Imported crude',e:'Imported crude',s:{fuel:'300–600',up:'500–1000'},
+  d:'The teapots’ main feed, obtained through non-state crude import quotas.',u:'Run rates fall when quotas tighten.'},
+ cdu:{x:210,y:230,k:'unit',n:'Crude unit (CDU)',e:'CDU',y_:{fuel:'100%',up:'100%'},
+  d:'Crude is heated to about 360°C and split by boiling point in an atmospheric column. No chemical reaction takes place.',u:'LPG and naphtha (up to about 220°C) leave the top, diesel the side draws, and atmospheric residue (which teapots call “fuel oil”) from the bottom goes to the vacuum unit.'},
+ fo:{x:310,y:320,w:130,h:38,k:'tag',n:'Fuel oil · dilbit',e:'Fuel oil / dilbit',
+  d:'Heavy feeds outside the crude quota: imported fuel oil, diluted bitumen and purchased residue.',u:'Fed to the vacuum column with atmospheric residue. The more is blended in, the more residue, petcoke and coker load.'},
+ vdu:{x:460,y:230,k:'unit',n:'Vacuum unit (VDU)',e:'VDU',y_:{fuel:'55–65%',up:'50–60%'},
+  d:'Distils atmospheric residue further under vacuum to avoid coking at high temperature.',u:'Side draws give a little vacuum diesel (first vacuum cut) and gas oil (360–540°C); vacuum residue is left at the bottom.'},
+ vgoin:{x:560,y:150,w:110,h:38,k:'tag',n:'Purchased VGO',e:'Purchased VGO',
+  d:'Gas oil bought from other refineries or traders.',u:'Goes straight into the cat cracker to raise its load.'},
+ ref:{x:330,y:70,k:'unit',n:'Cat reformer',e:'Reformer',s:{fuel:'40–100',up:'60–150'},y_:{fuel:'10–14%',up:'12–16%'},
+  d:'Converts naphthenes and paraffins in naphtha into aromatics, raising octane from the 60s to above 90.',u:'Reformate is a high-octane blendstock; the by-product hydrogen feeds the hydrotreaters.'},
+ aro:{x:520,y:70,k:'prod',c:'chem',n:'Aromatics',e:'BTX',m:'up',y_:{up:'4–7%'},
+  d:'Benzene, toluene and xylenes extracted from reformate.',u:'Sold as chemical feed; the raffinate becomes solvent oil.'},
+ fcc:{x:710,y:230,k:'unit',n:'Cat cracker (FCC)',e:'FCC',s:{fuel:'120–250',up:'150–300'},y_:{fuel:'28–35%',up:'22–30%'},
+  d:'Gas oil cracks over a catalyst without hydrogen. The heart of a teapot refinery.',u:'Makes FCC gasoline, FCC diesel and propylene-rich LPG; slurry oil from the bottom goes to the coker or into fuel oil.'},
+ hcu:{x:610,y:390,w:130,k:'unit',n:'Hydrocracker',e:'Hydrocracker',m:'up',s:{up:'100–200'},y_:{up:'8–15%'},
+  d:'Gas oil is cracked under high-pressure hydrogen.',u:'Makes more jet fuel and less diesel; the main way teapots cut diesel output.'},
+ lpgu:{x:840,y:70,k:'unit',n:'Gas plant · MTBE',e:'Gas plant / MTBE',y_:{fuel:'5–7%',up:'6–8%'},
+  d:'Sweetened LPG is split into propylene and C4s. Isobutylene in the C4s reacts with methanol to make MTBE, and the remaining C4s can make alkylate.',u:'MTBE and alkylate return to the gasoline pool; propylene is sold or made into PP; the rest becomes household LPG.'},
+ coker:{x:960,y:230,k:'unit',n:'Delayed coker',e:'Delayed coker',s:{fuel:'100–200',up:'100–200'},y_:{fuel:'33–42%',up:'25–35%'},
+  d:'Thermally cracks residue and slurry oil, rejecting carbon as petcoke. Cheap to build and able to take the worst feeds.',u:'Makes coker gasoline and diesel (both need hydrotreating), coker gas oil (back to the FCC) and petcoke.'},
+ coke:{x:1160,y:230,k:'prod',c:'coke',n:'Petcoke',e:'Petcoke',y_:{fuel:'8–12%',up:'6–9%'},
+  d:'Solid product of the coker.',u:'Low-sulfur coke goes into prebaked anodes and battery anode material; high-sulfur coke is burned as fuel.'},
+ pp:{x:1160,y:62,k:'prod',c:'chem',n:'Propylene · PP',e:'Propylene / PP',m:'up',y_:{up:'2–4%'},
+  d:'Propylene from the gas plant; some refiners have their own PP units.',u:'Injection mouldings, film and fibre.'},
+ lpg:{x:1160,y:140,k:'prod',c:'gas',n:'LPG',e:'LPG',y_:{fuel:'4–6%',up:'3–5%'},
+  d:'LPG left after propylene and C4s are taken out.',u:'Household and industrial fuel.'},
+ jet:{x:1160,y:390,k:'prod',c:'jet',n:'Jet fuel',e:'Jet fuel',m:'up',y_:{up:'5–9%'},
+  d:'The kerosene cut from the hydrocracker.',u:'Aviation fuel; demand is growing faster than for gasoline and diesel.'},
+ gas:{x:1160,y:470,k:'prod',c:'light',n:'Gasoline',e:'Gasoline',y_:{fuel:'25–30%',up:'22–27%'},
+  d:'FCC gasoline is desulfurized, then blended with reformate, MTBE, alkylate and other components to China VI gasoline.',u:'Road transport fuel.'},
+ dsl:{x:1160,y:545,k:'prod',c:'mid',n:'Diesel',e:'Diesel',y_:{fuel:'36–42%',up:'27–33%'},
+  d:'Diesel pool components are hydrotreated and blended to China VI diesel.',u:'Traditionally the teapots’ biggest product. Demand has peaked, so it is the main target for cuts.'},
+ gpool:{pool:1,x1:130,x2:1010,y:470,c:'light',n:'Gasoline pool',e:'Gasoline pool',d:'Gasoline components from every unit meet here. FCC gasoline must be desulfurized; reformate, MTBE and alkylate can be blended directly.',u:'Reformate, MTBE and alkylate lift the octane. Coker gasoline has low octane; after hydrotreating it mostly goes to the reformer, and little is blended directly.'},
+ dpool:{pool:1,x1:130,x2:1010,y:545,c:'mid',n:'Diesel pool',e:'Diesel pool',d:'Diesel components from every unit meet here and are hydrotreated before blending.',u:'Straight-run diesel is the best quality; FCC and coker diesel need deep hydrotreating.'}
+};
+/* ---------- 物流: p 為折線點; l/lx/ly 為標籤 ---------- */
+const E=[
+ {f:'crude',t:'cdu',c:'heavy',p:[[124,230],[140,230]]},
+ {f:'cdu',t:'vdu',c:'heavy',p:[[280,230],[390,230]],l:'atm. resid',lx:335,ly:218,a:'middle'},
+ {f:'fo',t:'vdu',c:'heavy',p:[[310,301],[310,236]],dash:1},
+ {f:'cdu',t:'ref',c:'light',p:[[210,201],[210,70],[260,70]],l:'naphtha ≤220°C',lx:216,ly:110},
+ {f:'ref',t:'aro',c:'chem',p:[[400,70],[450,70]],m:'up'},
+ {f:'vdu',t:'fcc',c:'heavy',p:[[530,230],[640,230]],l:'gas oil',lx:605,ly:218,a:'middle'},
+ {f:'vgoin',t:'fcc',c:'heavy',p:[[560,169],[560,224]],dash:1},
+ {f:'vdu',t:'hcu',c:'heavy',p:[[610,230],[610,361]],m:'up'},
+ {f:'vdu',t:'coker',c:'heavy',p:[[480,259],[480,330],[915,330],[915,259]],l:'vacuum residue',lx:488,ly:322},
+ {f:'fcc',t:'coker',c:'heavy',p:[[780,230],[890,230]],l:'slurry',lx:835,ly:218,a:'middle'},
+ {f:'coker',t:'fcc',c:'heavy',p:[[910,201],[910,172],[745,172],[745,201]],dash:1,l:'coker gas oil back to FCC',lx:828,ly:165,a:'middle'},
+ {f:'coker',t:'coke',c:'coke',p:[[1030,230],[1090,230]]},
+ {f:'fcc',t:'lpgu',c:'gas',p:[[710,201],[710,70],[770,70]],l:'LPG',lx:716,ly:110},
+ {f:'coker',t:'lpgu',c:'gas',p:[[950,201],[950,132],[880,132],[880,99]]},
+ {f:'lpgu',t:'pp',c:'chem',p:[[910,62],[1090,62]],m:'up',l:'Propylene',lx:1000,ly:55,a:'middle'},
+ {f:'lpgu',t:'lpg',c:'gas',p:[[910,84],[1040,84],[1040,140],[1090,140]]},
+ {f:'hcu',t:'jet',c:'jet',p:[[675,390],[1090,390]],m:'up',l:'jet fuel',lx:1050,ly:382,a:'middle'},
+ /* 落入汽油池 */
+ {f:'ref',t:'gpool',c:'light',p:[[385,99],[385,452]],l:'reformate',lx:391,ly:446},
+ {f:'fcc',t:'gpool',c:'light',p:[[690,259],[690,452]],l:'FCC gasoline',lx:696,ly:446},
+ {f:'lpgu',t:'gpool',c:'light',p:[[860,99],[860,452]],l:'MTBE · alkylate',lx:866,ly:446},
+ {f:'coker',t:'gpool',c:'light',p:[[965,259],[965,452]],l:'coker gasoline',lx:959,ly:425,a:'end'},
+ /* 落入柴油池 */
+ {f:'cdu',t:'dpool',c:'mid',p:[[210,259],[210,527]],l:'straight-run diesel',lx:216,ly:520},
+ {f:'vdu',t:'dpool',c:'mid',p:[[430,259],[430,527]],l:'1st vac. cut',lx:436,ly:520},
+ {f:'hcu',t:'dpool',c:'mid',p:[[610,419],[610,527]],m:'up',l:'HCU diesel',lx:616,ly:520},
+ {f:'fcc',t:'dpool',c:'mid',p:[[730,259],[730,527]],l:'FCC diesel',lx:736,ly:520},
+ {f:'coker',t:'dpool',c:'mid',p:[[1000,259],[1000,527]],l:'coker diesel',lx:1006,ly:425},
+ /* 池到成品 */
+ {f:'gpool',t:'gas',c:'light',p:[[1012,470],[1090,470]],l:'treat · blend',lx:1050,ly:458,a:'middle'},
+ {f:'dpool',t:'dsl',c:'mid',p:[[1012,545],[1090,545]],l:'treat · blend',lx:1050,ly:533,a:'middle'}
+];
+/* ---------- 各配置的數字 (中值示意, 合計100%) ---------- */
+const MODES={
+ fuel:{desc:'The mainstream Shandong set-up: a crude/vacuum unit with a cat cracker and delayed coker, converting residue by carbon rejection and making mostly gasoline and diesel. Cheap to build and flexible on feed, but liquid yields are low, petcoke output is high and the diesel share is large.',
+  kpi:[['Refined-fuel yield','63–72%',''],['Gasoline','25–30%','light'],['Diesel','36–42%','mid'],['Petcoke','8–12%','coke']],
+  fate:[['Gasoline',28,'light'],['Diesel',40,'mid'],['LPG',5,'gas'],['Petcoke',10,'coke'],['Dry gas · own use · loss',8,'heavy'],['Other',9,'soft']],
+  pools:{gpool:[['FCC gasoline',48],['reformate',34],['coker gasoline',14],['MTBE',4]],dpool:[['straight-run diesel',60],['1st vac. cut',4],['FCC diesel',16],['coker diesel',20]]},
+  other:'Other: slurry and fuel oil sales, road bitumen, naphtha sales, sulfur and so on.'},
+ up:{desc:'Adds a hydrocracker plus propylene and aromatics downstream to the fuels set-up, following the “less fuel, more chemicals” push: diesel falls clearly, jet fuel, aromatics and PP are added, and coker load drops. The refined-fuel yield is still far above the roughly 30% of the large integrated complexes.',
+  kpi:[['Refined-fuel yield','55–65%',''],['Gasoline','22–27%','light'],['Diesel','27–33%','mid'],['Petcoke','6–9%','coke']],
+  fate:[['Gasoline',25,'light'],['Diesel',30,'mid'],['jet fuel',7,'jet'],['Chemicals',9,'chem'],['LPG',5,'gas'],['Petcoke',8,'coke'],['Dry gas · own use · loss',9,'heavy'],['Other',7,'soft']],
+  pools:{gpool:[['FCC gasoline',46],['reformate',32],['coker gasoline',12],['MTBE · alkylate',10]],dpool:[['straight-run diesel',60],['1st vac. cut',3],['FCC diesel',17],['coker diesel',17],['HCU diesel',3]]},
+  other:'Other: slurry and fuel oil sales, road bitumen, solvent oil, sulfur and so on.'}
+};
+const FEED=new Set(['cdu','vdu','ref','fcc','hcu','lpgu','coker']);
+const POOLSHADE={gpool:['var(--light)','#b57d06','#f0c35a','#7d5703','#f6d892'],dpool:['var(--mid)','#1a6f61','#5cc0ae','#0f4c42','#9ad8cc']};
+
+/* ---------- 繪圖 ---------- */
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('svg'),tip=document.getElementById('tip'),board=document.getElementById('board');
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let mode='fuel',nodesEl={},edgesEl=[],pinned=null,hideT=null,showT=null;
+const vis=o=>!o.m||o.m===mode;
+const poolTotal=id=>N[id==='gpool'?'gas':'dsl'].y_[mode];
+function path(pts){
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length-1;i++){const a=pts[i-1],b=pts[i],c=pts[i+1],l1=Math.hypot(b[0]-a[0],b[1]-a[1]),l2=Math.hypot(c[0]-b[0],c[1]-b[1]),r=Math.min(10,l1/2,l2/2);
+    d+=`L${b[0]+(a[0]-b[0])/l1*r},${b[1]+(a[1]-b[1])/l1*r}Q${b[0]},${b[1]} ${b[0]+(c[0]-b[0])/l2*r},${b[1]+(c[1]-b[1])/l2*r}`}
+  const z=pts[pts.length-1];return d+`L${z[0]},${z[1]}`;
+}
+function chipText(o){
+  const s=o.s&&o.s[mode],y=o.y_&&o.y_[mode];
+  if(o.k==='feed')return s?s+' ×10⁴ t/yr':'';
+  return [s,y].filter(Boolean).join(' · ');
+}
+function draw(){
+  hide();svg.innerHTML='';nodesEl={};edgesEl=[];
+  const defs=el('defs',{},svg);
+  for(const c of ['gas','light','mid','jet','heavy','coke','chem']){const m=el('marker',{id:'a-'+c,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:9,markerHeight:9,orient:'auto',markerUnits:'userSpaceOnUse'},defs);el('path',{d:'M1,1.5L9,5L1,8.5z',style:`fill:var(--${c})`},m)}
+  const gF=el('g',{},svg),gP=el('g',{},svg),gL=el('g',{},svg),gN=el('g',{},svg);
+  for(const e of E){if(!vis(e))continue;
+    const pe=el('path',{d:path(e.p),class:`flow c-${e.c}${e.dash?' dash':''}`,'marker-end':`url(#a-${e.c})`},gF);
+    let lab=null;if(e.l){lab=el('text',{x:e.lx,y:e.ly,class:'flab','text-anchor':e.a||'start'},gL);lab.textContent=e.l}
+    edgesEl.push({e:pe,lab,f:e.f,t:e.t,l:e.l||''});
+  }
+  for(const id in N){const o=N[id];if(!vis(o))continue;
+    let g;
+    if(o.pool){
+      g=el('g',{class:'node pool','data-id':id,tabindex:0,role:'button','aria-label':o.n},gP);
+      el('rect',{x:o.x1,y:o.y-13,width:o.x2-o.x1,height:26,rx:13,style:`fill:var(--${o.c})`},g);
+      const pn=el('text',{x:o.x1+16,y:o.y+5,class:'pn'},g);pn.textContent=o.n;
+      el('text',{x:o.x1+16+pn.getComputedTextLength()+14,y:o.y+4,class:'pv'},g).textContent='of crude '+poolTotal(id);
+    }else{
+      const w=o.w||140,h=o.h||58;
+      g=el('g',{class:`node ${o.k}`,'data-id':id,tabindex:0,role:'button','aria-label':o.n,transform:`translate(${o.x-w/2},${o.y-h/2})`},gN);
+      const r=el('rect',{class:'card',width:w,height:h,rx:o.k==='tag'?8:12},g);
+      if(o.k==='prod')r.setAttribute('style',`fill:var(--${o.c}-t);stroke:var(--${o.c})`);
+      const chip=chipText(o);
+      el('text',{x:w/2,y:chip?h/2-3:h/2+5,class:'nm'},g).textContent=o.n;
+      if(chip){const t=el('text',{x:w/2,y:h/2+15,class:'ch'},g);t.textContent=chip;if(o.k==='prod')t.setAttribute('style',`fill:var(--${o.c})`)}
+    }
+    nodesEl[id]=g;
+    g.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT);if(pinned)return;if(tip.hidden)show(id);else showT=setTimeout(()=>show(id),150)});
+    g.addEventListener('mouseleave',()=>{clearTimeout(showT);if(!pinned)hideSoon()});
+    g.addEventListener('focus',()=>{if(!pinned)show(id)});
+    g.addEventListener('blur',()=>{if(!pinned)hide()});
+    g.addEventListener('click',ev=>{ev.stopPropagation();if(pinned===id){pinned=null;hide()}else{pinned=id;show(id)}});
+    g.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pinned=null;hide()}});
+  }
+}
+const nm=id=>N[id].n;
+function show(id){
+  const o=N[id],M=MODES[mode];
+  svg.classList.add('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');nodesEl[id].classList.add('on');
+  const ins=[],outs=[];
+  for(const x of edgesEl){const on=x.f===id||x.t===id;x.e.classList.toggle('on',on);x.lab&&x.lab.classList.toggle('on',on);
+    if(x.t===id){nodesEl[x.f].classList.add('on');ins.push(nm(x.f)+(x.l?` (${x.l})`:''))}
+    if(x.f===id){nodesEl[x.t].classList.add('on');outs.push(nm(x.t)+(x.l?` (${x.l})`:''))}}
+  let yl='';
+  if(o.pool)yl=`of crude ${poolTotal(id)}; make-up (midpoint estimate):`;
+  else{const y=o.y_&&o.y_[mode],s=o.s&&o.s[mode],parts=[];
+    if(s)parts.push(`Capacity ${s} ×10⁴ t/yr`);
+    if(y)parts.push(FEED.has(id)?`Throughput as share of crude: ${y}`:`Yield about ${y} (of crude)`);
+    yl=parts.join(', ');}
+  const comp=o.pool?`<ul>${M.pools[id].map(([n,v])=>`<li><span>${esc(n)}</span><span>${v}%</span></li>`).join('')}</ul>`:'';
+  const unit=FEED.has(id);
+  tip.innerHTML=`<h3>${esc(o.n)}<span>${esc(__ZH[o.n]||o.e)}</span></h3>${yl?`<div class="yl">${esc(yl)}</div>`:''}${comp}
+    <p><b class="k">${unit?'What this step does':'What it is'}</b>${esc(o.d)}</p><p><b class="k">${unit?'Where the products go':'Uses'}</b>${esc(o.u)}</p>
+    ${ins.length||outs.length?`<div class="io">${ins.length?`<span>← From: ${esc(ins.join(', '))}</span>`:''}${outs.length?`<span>→ To: ${esc(outs.join(', '))}</span>`:''}</div>`:''}`;
+  tip.hidden=false;
+  const nr=nodesEl[id].getBoundingClientRect(),wr=board.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left,top;
+  if(o.pool){left=Math.min(Math.max(4,nr.left-wr.left+40),wr.width-tw-4);top=nr.top-wr.top-th-10;if(top<4)top=nr.bottom-wr.top+10}
+  else{left=nr.right-wr.left+12;if(left+tw>wr.width-4)left=nr.left-wr.left-tw-12;if(left<4)left=Math.max(4,Math.min(wr.width-tw-4,nr.left-wr.left));
+    top=nr.top-wr.top-10;const over=left<nr.right-wr.left&&left+tw>nr.left-wr.left;if(over)top=nr.bottom-wr.top+10;
+    top=Math.max(4,Math.min(top,Math.max(4,wr.height-th-4)));
+    if(!over)top=Math.max(4,Math.min(top,window.innerHeight-wr.top-th-8));}
+  tip.style.left=left+'px';tip.style.top=top+'px';
+}
+function hide(){tip.hidden=true;svg.classList.remove('focus');for(const k in nodesEl)nodesEl[k].classList.remove('on');for(const x of edgesEl){x.e.classList.remove('on');x.lab&&x.lab.classList.remove('on')}}
+function hideSoon(){clearTimeout(hideT);hideT=setTimeout(()=>{if(!pinned)hide()},200)}
+tip.addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(showT)});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideSoon()});
+tip.addEventListener('click',ev=>ev.stopPropagation());
+document.addEventListener('click',()=>{if(pinned){pinned=null;hide()}});
+document.getElementById('scroll').addEventListener('scroll',()=>{if(pinned)show(pinned)});
+
+/* ---------- 摘要, 去向, 調和池 ---------- */
+function panels(){
+  const M=MODES[mode];
+  document.getElementById('mdesc').textContent=M.desc;
+  document.getElementById('kpis').innerHTML=M.kpi.map(([t,v,c])=>`<div class="kpi"><span>${t}</span><b class="${c}">${v}</b></div>`).join('');
+  const col=c=>c==='soft'?'var(--muted)':`var(--${c})`;
+  document.getElementById('fate').innerHTML=M.fate.map(([n,v,c])=>`<div style="flex:${v};background:${col(c)}" title="${n} ${v}%">${v>=6?v+'%':''}</div>`).join('');
+  document.getElementById('fatekeys').innerHTML=M.fate.map(([n,v,c])=>`<span><i style="background:${col(c)}"></i>${n} <b>${v}%</b></span>`).join('')+`<span>${esc(M.other)}</span>`;
+  document.getElementById('poolbars').innerHTML=['gpool','dpool'].map(id=>{
+    const sh=POOLSHADE[id],list=M.pools[id];
+    return `<div class="prow"><span class="t">${N[id].n}<span style="color:var(--muted);font-weight:400;margin-left:8px">of crude ${poolTotal(id)}</span></span>
+      <div class="stack">${list.map(([n,v],i)=>`<div style="flex:${v};background:${sh[i]}" title="${n} ${v}%">${v>=10?v+'%':''}</div>`).join('')}</div>
+      <div class="keys">${list.map(([n,v],i)=>`<span><i style="background:${sh[i]}"></i>${n} <b>${v}%</b></span>`).join('')}</div></div>`}).join('');
+  document.getElementById('lg-up').hidden=mode!=='up';
+}
+function setMode(m){mode=MODES[m]?m:'fuel';pinned=null;
+  for(const b of document.querySelectorAll('.seg button'))b.setAttribute('aria-pressed',b.dataset.m===mode);
+  draw();panels();}
+for(const b of document.querySelectorAll('.seg button'))b.addEventListener('click',()=>{location.hash=b.dataset.m;setMode(b.dataset.m)});
+window.addEventListener('hashchange',()=>setMode(location.hash.slice(1)));
+setMode(location.hash.slice(1));
+
+};
+</script>
+<script>
+/* 語言切換：換掉 #app 的內容並重新執行該語言的腳本，先前登記在 document/window 上的監聽一併移除 */
+(function(){
+  var HL={"zh-TW": "zh-Hant-TW", "zh-CN": "zh-Hans-CN", "en": "en-US"}, TT={"zh-TW": "山東地煉流程圖", "zh-CN": "山东地炼流程图", "en": "Shandong Teapot Refinery Flow"}, app=document.getElementById('app'), rec=[], cur=null;
+  var btns=[].slice.call(document.querySelectorAll('.langsw button'));
+  function mount(l){
+    if(!window.__APP[l]) l='zh-TW';
+    rec.forEach(function(r){r[0].removeEventListener(r[1],r[2],r[3])}); rec=[];
+    var D=document, W=window, add=EventTarget.prototype.addEventListener;
+    D.addEventListener=function(t,f,o){rec.push([D,t,f,o]);return add.call(D,t,f,o)};
+    W.addEventListener=function(t,f,o){rec.push([W,t,f,o]);return add.call(W,t,f,o)};
+    document.documentElement.lang=HL[l];
+    try{ app.replaceChildren(document.getElementById('t-'+l).content.cloneNode(true)); window.__APP[l](); }
+    finally{ delete D.addEventListener; delete W.addEventListener; }
+    document.title=TT[l]; cur=l;
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')===l))});
+    try{ localStorage.setItem('refinery-lang',l) }catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){var l=b.getAttribute('data-l');if(l!==cur)mount(l)})});
+  var init='zh-TW'; try{ init=localStorage.getItem('refinery-lang')||init }catch(e){}
+  mount(init);
+})();
 </script>
